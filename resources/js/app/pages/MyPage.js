@@ -1,10 +1,10 @@
 import React, {useEffect, useState} from "react";
 // import {useSubheader} from "../../_metronic/layout";
-import {Button} from "@material-ui/core";
+import {Button, responsiveFontSizes} from "@material-ui/core";
 import {API, WEB} from "../../_metronic/_helpers/AxiosHelper";
 import {useHistory} from "react-router-dom";
 import {actions} from "../modules/Auth";
-import {useDispatch} from "react-redux";
+import {shallowEqual, useDispatch, useSelector} from "react-redux";
 import {customLogin, customGetUserByToken, CUSTOM_LOGIN_URL} from "../modules/Auth/_redux/authCrud";
 
 export const MyPage = () => {
@@ -14,6 +14,12 @@ export const MyPage = () => {
     const [user,setUser] = useState({});
     const history = useHistory();
     const dispatch = useDispatch();
+    const { authToken } = useSelector(
+        ({ auth }) => ({
+            authToken: auth.authToken,
+        }),
+        shallowEqual
+    );
 
     useEffect(()=>{
         clickLoginHandler('admin@demo.com','password');
@@ -64,6 +70,7 @@ export const MyPage = () => {
         customLogin('admin@demo.com', 'password').then(response=>{
             setToken(response.data.token);
             dispatch(actions.customLogin(response.data.token));
+
         });
     }
 
@@ -71,7 +78,11 @@ export const MyPage = () => {
         dispatch(actions.logout());
     }
     const buttonUserHandler = () => {
-        dispatch(actions.requestUser(user));
+        customGetUserByToken(authToken).then(response=>{
+            let user = response.data.data;
+            dispatch(actions.customRequestUser(user));
+        })
+
     }
 
     const button4Handler = () => {

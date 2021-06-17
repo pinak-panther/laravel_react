@@ -1,7 +1,7 @@
 import { persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import { put, takeLatest } from "redux-saga/effects";
-import { getUserByToken } from "./authCrud";
+import {customGetUserByToken, getUserByToken} from "./authCrud";
 
 export const actionTypes = {
   Login: "[Login] Action",
@@ -25,13 +25,11 @@ export const reducer = persistReducer(
     switch (action.type) {
       case actionTypes.Login: {
         const { authToken } = action.payload;
-
         return { authToken, user: undefined };
       }
 
       case actionTypes.Register: {
         const { authToken } = action.payload;
-
         return { authToken, user: undefined };
       }
 
@@ -50,6 +48,11 @@ export const reducer = persistReducer(
         return { ...state, user };
       }
 
+     case actionTypes.CustomLogin: {
+        const { authToken } = action.payload;
+        return {...state, authToken};
+     }
+
       default:
         return state;
     }
@@ -58,11 +61,6 @@ export const reducer = persistReducer(
 
 export const actions = {
   login: (authToken) => ({ type: actionTypes.Login, payload: { authToken } }),
-    customLogin: (authToken) => ({ type: actionTypes.CustomLogin, payload: { authToken } }),
-    customRequestUser: (user) => ({
-        type: actionTypes.CustomUserRequested,
-        payload: { user },
-    }),
   register: (authToken) => ({
     type: actionTypes.Register,
     payload: { authToken },
@@ -74,6 +72,8 @@ export const actions = {
   }),
   fulfillUser: (user) => ({ type: actionTypes.UserLoaded, payload: { user } }),
   setUser: (user) => ({ type: actionTypes.SetUser, payload: { user } }),
+  customLogin: (authToken) => ({ type: actionTypes.CustomLogin, payload: { authToken } }),
+  customRequestUser: (user) => ({type: actionTypes.CustomUserRequested,payload: { user }}),
 };
 
 export function* saga() {
@@ -88,6 +88,12 @@ export function* saga() {
   yield takeLatest(actionTypes.UserRequested, function* userRequested() {
       const { data: user } = yield getUserByToken();
 
+      yield put(actions.fulfillUser(user));
+  });
+
+  yield takeLatest(actionTypes.CustomUserRequested, function* customUserRequestedSaga() {
+      //const { data: user } = yield customGetUserByToken()
+      const { data: user } = yield getUserByToken();
       yield put(actions.fulfillUser(user));
   });
 }
