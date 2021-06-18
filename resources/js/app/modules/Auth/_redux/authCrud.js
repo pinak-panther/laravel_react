@@ -1,5 +1,6 @@
 import axios from "axios";
 import {API} from "../../../../_metronic/_helpers/AxiosHelper";
+import store from "../../../../redux/store";
 
 export const LOGIN_URL = `${process.env.REACT_APP_API_URL}/auth/login`;
 export const REGISTER_URL = "api/auth/register";
@@ -31,8 +32,10 @@ export function customLogin(email, password) {
     return API.post(CUSTOM_LOGIN_URL, { email, password });
 }
 
-export function customGetUserByToken(token) {
+export function customGetUserByToken() {
     // Authorization head should be fulfilled in interceptor.
+    const state = store.getState();
+    let token = state.auth.authToken;
     let header = {
         headers:{
             Authorization:`Bearer ${token}`

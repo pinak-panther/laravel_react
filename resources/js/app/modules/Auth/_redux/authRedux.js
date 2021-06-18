@@ -91,9 +91,12 @@ export function* saga() {
       yield put(actions.fulfillUser(user));
   });
 
-  yield takeLatest(actionTypes.CustomUserRequested, function* customUserRequestedSaga() {
-      //const { data: user } = yield customGetUserByToken()
-      const { data: user } = yield getUserByToken();
-      yield put(actions.fulfillUser(user));
+  yield takeLatest(actionTypes.CustomLogin, function* customLoginSaga() {
+        yield put(actions.customRequestUser());
+    });
+
+  yield takeLatest(actionTypes.CustomUserRequested, function* customUserRequested() {
+      const { data } = yield customGetUserByToken();
+      yield put(actions.fulfillUser(data.data));
   });
 }
