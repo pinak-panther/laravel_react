@@ -5,7 +5,7 @@ import * as Yup from "yup";
 import { connect } from "react-redux";
 import { FormattedMessage, injectIntl } from "react-intl";
 import * as auth from "../_redux/authRedux";
-import { login } from "../_redux/authCrud";
+import {customLogin, login} from "../_redux/authCrud";
 
 /*
   INTL (i18n) docs:
@@ -19,7 +19,7 @@ import { login } from "../_redux/authCrud";
 
 const initialValues = {
   email: "admin@demo.com",
-  password: "demo",
+  password: "password",
 };
 
 function Login(props) {
@@ -71,11 +71,13 @@ function Login(props) {
     onSubmit: (values, { setStatus, setSubmitting }) => {
       enableLoading();
       setTimeout(() => {
-        login(values.email, values.password)
-          .then(({ data: { authToken } }) => {
+        // login(values.email, values.password)
+        customLogin(values.email, values.password)
+          //.then(({ data: { authToken } }) => {
+          .then(({data:{token}}) => {
             disableLoading();
-
-            props.login(authToken);
+            // props.login(token);
+            props.customLogin(token);
           })
           .catch(() => {
             setStatus(

@@ -114,7 +114,7 @@ export default function ListProduct() {
                     ))}
                 </TableBody>
             </Table>
-            <Button onClick={()=>{testHandler()}}>Test</Button>
+            {/*<Button onClick={()=>{testHandler()}}>Test</Button>*/}
         </Paper>
     );
 }
