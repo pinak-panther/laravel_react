@@ -22,7 +22,8 @@ export const MyPage = () => {
     );
 
     useEffect(()=>{
-        clickLoginHandler('admin@demo.com','password');
+        //clickLoginHandler('admin@demo.com','password');
+        buttonLoginHandler();
     },[])
     const testButtonHandler = (event) => {
       API.get('/test',{
@@ -66,11 +67,10 @@ export const MyPage = () => {
         })
     }
     //custom redux events
-    const buttonLoginHandler = () => {
-        customLogin('admin@demo.com', 'password').then(response=>{
+    const buttonLoginHandler = (email='admin@demo.com',password='password') => {
+        customLogin(email,password).then(response=>{
             setToken(response.data.token);
             dispatch(actions.customLogin(response.data.token));
-
         });
     }
 
@@ -82,7 +82,6 @@ export const MyPage = () => {
             let user = response.data.data;
             dispatch(actions.customRequestUser(user));
         })
-
     }
 
     const button4Handler = () => {

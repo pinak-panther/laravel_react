@@ -1,5 +1,5 @@
 import axios from "axios";
-import {API} from "../../../../_metronic/_helpers/AxiosHelper";
+import {API, WEB} from "../../../../_metronic/_helpers/AxiosHelper";
 import store from "../../../../redux/store";
 
 export const LOGIN_URL = `${process.env.REACT_APP_API_URL}/auth/login`;
@@ -12,24 +12,27 @@ export const CUSTOM_ME_URL = "/user";
 
 
 export function login(email, password) {
-  return axios.post(LOGIN_URL, { email, password });
+    return axios.post(LOGIN_URL, {email, password});
 }
 
 export function register(email, fullname, username, password) {
-  return axios.post(REGISTER_URL, { email, fullname, username, password });
+    return axios.post(REGISTER_URL, {email, fullname, username, password});
 }
 
 export function requestPassword(email) {
-  return axios.post(REQUEST_PASSWORD_URL, { email });
+    return axios.post(REQUEST_PASSWORD_URL, {email});
 }
 
 export function getUserByToken() {
-  // Authorization head should be fulfilled in interceptor.
-  return axios.get(ME_URL);
+    // Authorization head should be fulfilled in interceptor.
+    return axios.get(ME_URL);
 }
 
 export function customLogin(email, password) {
-    return API.post(CUSTOM_LOGIN_URL, { email, password });
+    return WEB.get('/sanctum/csrf-cookie')
+        .then(response => {
+            return API.post(CUSTOM_LOGIN_URL, {email, password});
+        });
 }
 
 export function customGetUserByToken() {
@@ -37,9 +40,9 @@ export function customGetUserByToken() {
     const state = store.getState();
     let token = state.auth.authToken;
     let header = {
-        headers:{
-            Authorization:`Bearer ${token}`
+        headers: {
+            Authorization: `Bearer ${token}`
         }
     }
-    return API.get(CUSTOM_ME_URL,header);
+    return API.get(CUSTOM_ME_URL, header);
 }
