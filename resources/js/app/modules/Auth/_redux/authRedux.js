@@ -20,7 +20,7 @@ const initialAuthState = {
 };
 
 export const reducer = persistReducer(
-  { storage, key: "v726-demo1-auth", whitelist: ["authToken"] },
+  { storage, key: "v726-demo1-auth", whitelist: ["authToken","user"] },
   (state = initialAuthState, action) => {
     switch (action.type) {
       case actionTypes.Login: {
