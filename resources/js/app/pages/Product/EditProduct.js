@@ -72,7 +72,7 @@ export default function EditProduct(props) {
     }
 
     return (
-        <form className={classes.container} noValidate autoComplete="off" onSubmit={(event)=>{handleFormSubmit(event)}}>
+        <form className={classes.container} style={{display:"inline"}} noValidate autoComplete="off" onSubmit={(event)=>{handleFormSubmit(event)}}>
             <TextField
                 id="filled-name"
                 label="Name"
@@ -109,10 +109,11 @@ export default function EditProduct(props) {
                 margin="normal"
                 variant="filled"
             />
-
-            <Button variant="contained" type={"submit"}>
-                Edit Product
-            </Button>
+            <div style={{textAlign:"center"}}>
+                <Button variant="contained" type={"submit"} color={'secondary'} size={'large'}>
+                    Edit Product
+                </Button>
+            </div>
         </form>
     );
 }

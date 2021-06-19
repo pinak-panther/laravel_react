@@ -9,7 +9,7 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import {API} from "../../../_metronic/_helpers/AxiosHelper";
 import {useHistory} from "react-router-dom";
-import {Button} from "@material-ui/core";
+import {Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle} from "@material-ui/core";
 
 const StyledTableCell = withStyles(theme => ({
     head: {
@@ -65,6 +65,8 @@ export default function ListProduct() {
     const [changeFlag,setChangFlag] = useState(true);
     const [page,setPage]=useState(1);
     const [loading,setLoading]=useState(false);
+    const [open, setOpen] = useState(false);
+    const [selectedId,setSelectedId]=useState('');
 
     const loadProducts = () => {
         API.get(`product?page=${page}`)
@@ -90,17 +92,22 @@ export default function ListProduct() {
     const userClickHandler = (id)=>{
        history.push(`product-edit/${id}`);
     }
-    const userDeleteHandler = (id) =>{
-     if(window.confirm("Are you sure you want to delete the product ? ")){
-         API.delete(`product/${id}`).then(response=>{
-             let filteredProducts = product.filter(singleProduct => singleProduct.id != id);
+    const userDeleteHandler = () =>{
+         API.delete(`product/${selectedId}`).then(response=>{
+             let filteredProducts = product.filter(singleProduct => singleProduct.id != selectedId);
              setProduct(filteredProducts);
+             setSelectedId('');
+             setOpen(false);
          })
-     }
     }
 
     const loadMoreClickHandler = () => {
         setChangFlag(!changeFlag);
+    }
+
+    function handleClickOpen(id) {
+        setSelectedId(id);
+        setOpen(true);
     }
 
     return (
@@ -124,7 +131,8 @@ export default function ListProduct() {
                             <StyledTableCell align="center">{row.category}</StyledTableCell>
                             <StyledTableCell align="center">
                                 <Button size="small" variant="contained" onClick={(event)=>userClickHandler(row.id)} color={"secondary"} className={classes.margin}> Update </Button>
-                                <Button size="small" variant="contained" onClick={(event)=>userDeleteHandler(row.id)} color={"secondary"}> Delete </Button>
+                                <Button size="small" variant="contained" onClick={(event)=>handleClickOpen(row.id)} color={"secondary"}> Delete </Button>
+                                {/*<Button size="small" variant="contained" onClick={(event)=>userDeleteHandler(row.id)} color={"secondary"}> Delete </Button>*/}
                             </StyledTableCell>
 
                         </StyledTableRow>
@@ -134,6 +142,27 @@ export default function ListProduct() {
             <div className={classes.loadMore}>
             <Button variant="contained" disabled={!loading} onClick={()=>{loadMoreClickHandler()}} color={"secondary"} size={"large"} className={classes.button}>Load More</Button>
             </div>
+            <Dialog
+                open={open}
+                onClose={()=>setOpen(false)}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                <DialogTitle id="alert-dialog-title">{"Product Delete Alert"}</DialogTitle>
+                <DialogContent>
+                    <DialogContentText id="alert-dialog-description">
+                      Are you sure you want to delete this product ?
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={()=>setOpen(false)} color="secondary" variant="contained" size={'small'}>
+                        Disagree
+                    </Button>
+                    <Button variant="contained" onClick={()=>userDeleteHandler()} color="secondary" autoFocus size={'small'}>
+                        Agree
+                    </Button>
+                </DialogActions>
+            </Dialog>
         </Paper>
     );
 }

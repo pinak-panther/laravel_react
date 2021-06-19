@@ -61,7 +61,7 @@ export default function AddProduct() {
 
 
     return (
-        <form className={classes.container} noValidate autoComplete="off" onSubmit={(event)=>{handleFormSubmit(event)}}>
+        <form className={classes.container} style={{display:"inline"}} noValidate autoComplete="off" onSubmit={(event)=>{handleFormSubmit(event)}}>
             <TextField
                 id="name"
                 label="Name"
@@ -98,11 +98,11 @@ export default function AddProduct() {
                 margin="normal"
                 variant="filled"
             />
-
-            <Button variant="contained" type={"submit"}>
-                Add Product
-            </Button>
-
+            <div style={{textAlign:"center"}}>
+                <Button variant="contained" type={"submit"} color={'secondary'} size={'large'} >
+                    Add Product
+                </Button>
+            </div>
         </form>
     );
 }
