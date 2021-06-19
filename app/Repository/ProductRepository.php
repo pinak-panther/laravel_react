@@ -13,7 +13,7 @@ class ProductRepository implements ProductRepositoryInterface
     public function getAll($input){
         $sort = ['id','DESC']; //default
         $sortField = $sort[0];
-        $sortDirection = $sort[1] == 'desc'?'DESC':'ASC';
+        $sortDirection = strtolower($sort[1]) == 'desc'?'DESC':'ASC';
         $perPage = $input['perPage'] ?? 10;
         return Product::orderBy($sortField,$sortDirection)->paginate($perPage);
     }
