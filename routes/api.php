@@ -2,7 +2,9 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\V1\API\ProductController;
+use App\Http\Controllers\V1\API\SanctumApiTokenController;
+use Illuminate\Support\Facades\Auth;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -14,6 +16,14 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+//Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+////    return $request->user();
+//    return Auth::user();
+//});
+Route::post('/login', [SanctumApiTokenController::class,'createAuthToken']);
+Route::group(['middleware'=>'auth:sanctum'],function(){
+    Route::get('/test',function (Request $request){return 'sanctum is working.';});
+    Route::get('/user', [SanctumApiTokenController::class,'getCurrentUser']);
+    Route::post('/logout', [SanctumApiTokenController::class,'destroyAuthToken']);
 });
+Route::resource('product',ProductController::class);
