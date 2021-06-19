@@ -4,11 +4,11 @@
 namespace App\Repository;
 
 use App\Models\Product;
-class ProductRepository
+class ProductRepository implements ProductRepositoryInterface
 {
     /**
-     * @param $input
-     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
+     * @param array $input
+     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator|mixed
      */
     public function getAll($input){
         $sort = ['id','DESC']; //default
@@ -19,8 +19,8 @@ class ProductRepository
     }
 
     /**
-     * @param $id
-     * @return Prodcut|\Illuminate\Database\Eloquent\Model
+     * @param string $id
+     * @return Product|Product[]|\Illuminate\Database\Eloquent\Collection|\Illuminate\Database\Eloquent\Model|mixed
      */
     public function find($id)
     {
@@ -28,8 +28,8 @@ class ProductRepository
     }
 
     /**
-     * @param $id
-     * @return mixed
+     * @param string $id
+     * @return mixed|string
      */
     public function delete($id)
     {
@@ -39,8 +39,8 @@ class ProductRepository
     }
 
     /**
-     * @param $inputs
-     * @return Product|\Illuminate\Database\Eloquent\Model
+     * @param array $inputs
+     * @return Product|\Illuminate\Database\Eloquent\Model|mixed
      */
     public function store($inputs)
     {
@@ -53,9 +53,9 @@ class ProductRepository
     }
 
     /**
-     * @param $inputs
-     * @param $id
-     * @return bool
+     * @param array $inputs
+     * @param string $id
+     * @return bool|mixed
      */
     public function edit($inputs,$id)
     {

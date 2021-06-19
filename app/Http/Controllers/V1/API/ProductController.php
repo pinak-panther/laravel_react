@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\V1\API;
 
-use App\Repository\ProductRepository;
+use App\Repository\ProductRepositoryInterface;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 class ProductController extends Controller
@@ -26,7 +26,7 @@ class ProductController extends Controller
         'category'=>'required'
     ];
 
-    public function __construct(ProductRepository $productRepository)
+    public function __construct(ProductRepositoryInterface $productRepository)
     {
         $this->productRepo = $productRepository;
     }
