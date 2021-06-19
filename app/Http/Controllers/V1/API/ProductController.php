@@ -33,15 +33,15 @@ class ProductController extends Controller
 
     /**
      * Display a listing of the resource.
-     *
+     * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function index()
+    public function index(Request $request)
     {
-        $users = $this->productRepo->getAll();
-        return $this->sendResponse($users,"Products get Successfully");
+        $inputs = $request->all();
+        $products = $this->productRepo->getAll($inputs);
+        return $this->sendResponse($products,"Products get Successfully");
     }
-
 
     /**
      * Store a newly created resource in storage.

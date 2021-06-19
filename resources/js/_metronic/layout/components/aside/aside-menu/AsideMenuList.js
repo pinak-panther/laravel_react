@@ -59,14 +59,9 @@ export function AsideMenuList({layoutProps}) {
                             </li>
 
                             {/*begin::2 Level*/}
-                            <li
-                                className={`menu-item ${getMenuItemActive("/product-add")}`}
-                                aria-haspopup="true"
-                            >
+                            <li className={`menu-item ${getMenuItemActive("/product-add")}`} aria-haspopup="true" >
                                 <NavLink className="menu-link" to="/product-add">
-                                    <i className="menu-bullet menu-bullet-dot">
-                                        <span/>
-                                    </i>
+                                    <i className="menu-bullet menu-bullet-dot"><span/></i>
                                     <span className="menu-text">Add Product</span>
                                 </NavLink>
                             </li>
@@ -87,14 +82,9 @@ export function AsideMenuList({layoutProps}) {
                             {/*end::2 Level*/}
 
                             {/*begin::2 Level*/}
-                            <li
-                                className={`menu-item ${getMenuItemActive("/product-list")}`}
-                                aria-haspopup="true"
-                            >
+                            <li className={`menu-item ${getMenuItemActive("/product-list")}`} aria-haspopup="true" >
                                 <NavLink className="menu-link" to="/product-list">
-                                    <i className="menu-bullet menu-bullet-dot">
-                                        <span/>
-                                    </i>
+                                    <i className="menu-bullet menu-bullet-dot"> <span/> </i>
                                     <span className="menu-text">Product List</span>
                                 </NavLink>
                             </li>

@@ -7,10 +7,15 @@ use App\Models\Product;
 class ProductRepository
 {
     /**
-     * @return Product[]|\Illuminate\Database\Eloquent\Collection
+     * @param $input
+     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
      */
-    public function getAll(){
-        return Product::all();
+    public function getAll($input){
+        $sort = ['id','DESC']; //default
+        $sortField = $sort[0];
+        $sortDirection = $sort[1] == 'desc'?'DESC':'ASC';
+        $perPage = $input['perPage'] ?? 10;
+        return Product::orderBy($sortField,$sortDirection)->paginate($perPage);
     }
 
     /**

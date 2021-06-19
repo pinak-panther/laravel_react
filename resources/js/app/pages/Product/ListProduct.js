@@ -46,30 +46,46 @@ const useStyles = makeStyles(theme => ({
     extendedIcon: {
         marginRight: theme.spacing(1),
     },
+    button: {
+        margin: theme.spacing(1),
+    },
+    loadMore: {
+     textAlign:"center"
+    }
 }));
 
 function createData(id,name, description, price, category) {
     return { id, name, description, price, category };
 }
 
-const rows = [];
-
 export default function ListProduct() {
     const classes = useStyles();
     const history = useHistory();
     const [product,setProduct] = useState([]);
     const [changeFlag,setChangFlag] = useState(true);
+    const [page,setPage]=useState(1);
+    const [loading,setLoading]=useState(false);
+
+    const loadProducts = () => {
+        API.get(`product?page=${page}`)
+            .then(response => {
+                setLoading(response.data.data.next_page_url == null ? false : true);
+                setPage(prev => prev + 1);
+                let data = response.data.data;
+                let products = data.data;
+                if (products.length > 0) {
+                    let tempArr = [];
+                    products.map(product => {
+                        tempArr.push(createData(product.id, product.name, product.description, product.price, product.category));
+                    });
+                    setProduct(prevState => prevState.concat(tempArr));
+                }
+            }).catch(err => console.error(err))
+    }
+
     useEffect(()=>{
-        API.get('product')
-            .then(response=>{
-                let data  = response.data.data;
-                let tempArr = []
-                data.map(product=>{
-                    tempArr.push(createData(product.id,product.name,product.description,product.price,product.category));
-                });
-                setProduct(tempArr);
-            }).catch(err=>console.error(err))
-    },[changeFlag])
+        loadProducts();
+    },[changeFlag]);
 
     const userClickHandler = (id)=>{
        history.push(`product-edit/${id}`);
@@ -77,13 +93,14 @@ export default function ListProduct() {
     const userDeleteHandler = (id) =>{
      if(window.confirm("Are you sure you want to delete the product ? ")){
          API.delete(`product/${id}`).then(response=>{
-             setChangFlag(!changeFlag);
+             let filteredProducts = product.filter(singleProduct => singleProduct.id != id);
+             setProduct(filteredProducts);
          })
      }
     }
 
-    const testHandler = () => {
-        history.push('/my-page');
+    const loadMoreClickHandler = () => {
+        setChangFlag(!changeFlag);
     }
 
     return (
@@ -114,7 +131,9 @@ export default function ListProduct() {
                     ))}
                 </TableBody>
             </Table>
-            {/*<Button onClick={()=>{testHandler()}}>Test</Button>*/}
+            <div className={classes.loadMore}>
+            <Button variant="contained" disabled={!loading} onClick={()=>{loadMoreClickHandler()}} color={"secondary"} size={"large"} className={classes.button}>Load More</Button>
+            </div>
         </Paper>
     );
 }
