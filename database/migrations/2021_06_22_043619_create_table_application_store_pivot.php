@@ -13,7 +13,7 @@ class CreateTableApplicationStorePivot extends Migration
      */
     public function up()
     {
-        Schema::create('table_application_store_pivot', function (Blueprint $table) {
+        Schema::create('application_store', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('application_id');
             $table->unsignedBigInteger('store_id');
