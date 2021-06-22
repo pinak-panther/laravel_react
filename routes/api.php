@@ -25,5 +25,10 @@ Route::group(['middleware'=>'auth:sanctum'],function(){
     Route::get('/test',function (Request $request){return 'sanctum is working.';});
     Route::get('/user', [SanctumApiTokenController::class,'getCurrentUser']);
     Route::post('/logout', [SanctumApiTokenController::class,'destroyAuthToken']);
+
+    Route::resource('application',ApplicationController::class);
+    Route::resource('store',\App\Http\Controllers\StoreController::class);
+    Route::resource('plan',\App\Http\Controllers\PlanController::class);
+
 });
 Route::resource('product',ProductController::class);

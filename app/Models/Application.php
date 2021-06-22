@@ -9,9 +9,9 @@ use App\Models\Store;
 class Application extends Model
 {
     use HasFactory, SoftDeletes;
-
+    protected $fillable = ['name','description'];
     public function stores()
     {
-        return $this->belongsToMany(Store::class,'application_store');
+        return $this->belongsToMany(Store::class,'application_store')->withPivot('plan_id');
     }
 }
