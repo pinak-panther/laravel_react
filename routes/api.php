@@ -4,7 +4,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\V1\API\ProductController;
 use App\Http\Controllers\V1\API\SanctumApiTokenController;
-use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\V1\API\ApplicationController;
+use App\Http\Controllers\V1\API\StoreController;
+use App\Http\Controllers\V1\API\PlanController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -27,8 +29,8 @@ Route::group(['middleware'=>'auth:sanctum'],function(){
     Route::post('/logout', [SanctumApiTokenController::class,'destroyAuthToken']);
 
     Route::resource('application',ApplicationController::class);
-    Route::resource('store',\App\Http\Controllers\StoreController::class);
-    Route::resource('plan',\App\Http\Controllers\PlanController::class);
+    Route::resource('store',StoreController::class);
+    Route::resource('plan',PlanController::class);
 
 });
 Route::resource('product',ProductController::class);

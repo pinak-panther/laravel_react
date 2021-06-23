@@ -3,6 +3,7 @@
 
 namespace App\Repository;
 
+use App\Models\Application;
 use App\Models\Store;
 class StoreRepository implements StoreRepositoryInterface
 {
@@ -15,7 +16,11 @@ class StoreRepository implements StoreRepositoryInterface
         $sortField = $sort[0];
         $sortDirection = strtolower($sort[1]) == 'desc'?'DESC':'ASC';
         $perPage = $input['perPage'] ?? 10;
+        if(@$input['appId'] && @$input['planId']){
+            return Application::findOrFail($input['appId'])->stores()->wherePivot('plan_id',$input['planId'])->paginate($perPage);
+        }
         return Store::orderBy($sortField,$sortDirection)->paginate($perPage);
+
     }
 
     /**
@@ -46,7 +51,7 @@ class StoreRepository implements StoreRepositoryInterface
     {
         return Store::create([
             'name'=>$inputs['name'],
-            'price'=>$inputs['price']
+            'email'=>$inputs['email']
         ]);
     }
 

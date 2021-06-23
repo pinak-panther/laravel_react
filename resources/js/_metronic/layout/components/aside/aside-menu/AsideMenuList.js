@@ -19,100 +19,232 @@ export function AsideMenuList({layoutProps}) {
         <>
             {/* begin::Menu Nav */}
             <ul className={`menu-nav ${layoutProps.ulClasses}`}>
+                {/* Material-UI */}
                 {/*begin::1 Level*/}
-                {/*<li*/}
-                {/*  className={`menu-item ${getMenuItemActive("/dashboard", false)}`}*/}
-                {/*  aria-haspopup="true"*/}
-                {/*>*/}
-                {/*  <NavLink className="menu-link" to="/dashboard">*/}
-                {/*    <span className="svg-icon menu-icon">*/}
-                {/*      <SVG src={toAbsoluteUrl("/media/svg/icons/Design/Layers.svg")} />*/}
-                {/*    </span>*/}
-                {/*    <span className="menu-text">Dashboard</span>*/}
-                {/*  </NavLink>*/}
-                {/*</li>*/}
-
                 <li
                     className={`menu-item menu-item-submenu ${getMenuItemActive(
-                        "/product-list",
+                        "/google-material",
                         true
                     )}`}
                     aria-haspopup="true"
                     data-menu-toggle="hover"
                 >
-                    <NavLink className="menu-link menu-toggle" to="/product-list">
+                    <NavLink className="menu-link menu-toggle" to="/google-material">
             <span className="svg-icon menu-icon">
-              <SVG
-                  src={toAbsoluteUrl("/media/svg/icons/Communication/Add-user.svg")}
-              />
+              <SVG src={toAbsoluteUrl("/media/svg/icons/Design/Cap-2.svg")} />
             </span>
-                        <span className="menu-text">Product Pages</span>
-                        <i className="menu-arrow"/>
+                        <span className="menu-text">Plugin Center</span>
+                        <i className="menu-arrow" />
                     </NavLink>
                     <div className="menu-submenu ">
-                        <i className="menu-arrow"/>
+                        <i className="menu-arrow" />
                         <ul className="menu-subnav">
                             <li className="menu-item  menu-item-parent" aria-haspopup="true">
-                                <span className="menu-link">
-                                  <span className="menu-text">Product Pages</span>
-                                </span>
+                <span className="menu-link">
+                  <span className="menu-text">Material UI</span>
+                </span>
                             </li>
 
+                            {/* Inputs */}
                             {/*begin::2 Level*/}
-                            <li className={`menu-item ${getMenuItemActive("/product-add")}`} aria-haspopup="true" >
-                                <NavLink className="menu-link" to="/product-add">
-                                    <i className="menu-bullet menu-bullet-dot"><span/></i>
-                                    <span className="menu-text">Add Product</span>
+                            <li
+                                className={`menu-item menu-item-submenu ${getMenuItemActive(
+                                    "/application-list",
+                                    true
+                                )}`}
+                                aria-haspopup="true"
+                                data-menu-toggle="hover"
+                            >
+                                <NavLink
+                                    className="menu-link menu-toggle"
+                                    to="/application-list"
+                                >
+                                    <i className="menu-bullet menu-bullet-dot">
+                                        <span />
+                                    </i>
+                                    <span className="menu-text">Applications</span>
+                                    <i className="menu-arrow" />
                                 </NavLink>
+                                <div className="menu-submenu ">
+                                    <i className="menu-arrow" />
+                                    <ul className="menu-subnav">
+                                        {/*begin::3 Level*/}
+                                        <li
+                                            className={`menu-item  ${getMenuItemActive(
+                                                "/application-list"
+                                            )}`}
+                                            aria-haspopup="true"
+                                        >
+                                            <NavLink
+                                                className="menu-link"
+                                                to="/application-list"
+                                            >
+                                                <i className="menu-bullet menu-bullet-dot">
+                                                    <span />
+                                                </i>
+                                                <span className="menu-text">Application List</span>
+                                            </NavLink>
+                                        </li>
+                                        {/*end::3 Level*/}
+
+                                        {/*begin::3 Level*/}
+                                        <li
+                                            className={`menu-item ${getMenuItemActive(
+                                                "/application-add"
+                                            )}`}
+                                            aria-haspopup="true"
+                                        >
+                                            <NavLink
+                                                className="menu-link"
+                                                to="/application-add"
+                                            >
+                                                <i className="menu-bullet menu-bullet-dot">
+                                                    <span />
+                                                </i>
+                                                <span className="menu-text">Application Add</span>
+                                            </NavLink>
+                                        </li>
+                                        {/*end::3 Level*/}
+
+                                    </ul>
+                                </div>
                             </li>
                             {/*end::2 Level*/}
 
+                            {/* Navigation */}
                             {/*begin::2 Level*/}
-                            {/*<li*/}
-                            {/*    className={`menu-item ${getMenuItemActive("/user-edit")}`}*/}
-                            {/*    aria-haspopup="true"*/}
-                            {/*>*/}
-                            {/*    <NavLink className="menu-link" to="/user-edit">*/}
-                            {/*        <i className="menu-bullet menu-bullet-dot">*/}
-                            {/*            <span />*/}
-                            {/*        </i>*/}
-                            {/*        <span className="menu-text">User Edit</span>*/}
-                            {/*    </NavLink>*/}
-                            {/*</li>*/}
-                            {/*end::2 Level*/}
-
-                            {/*begin::2 Level*/}
-                            <li className={`menu-item ${getMenuItemActive("/product-list")}`} aria-haspopup="true" >
-                                <NavLink className="menu-link" to="/product-list">
-                                    <i className="menu-bullet menu-bullet-dot"> <span/> </i>
-                                    <span className="menu-text">Product List</span>
+                            <li
+                                className={`menu-item menu-item-submenu  ${getMenuItemActive(
+                                    "/plan-list",
+                                    true
+                                )}`}
+                                aria-haspopup="true"
+                                data-menu-toggle="hover"
+                            >
+                                <NavLink
+                                    className="menu-link menu-toggle"
+                                    to="/plan-list"
+                                >
+                                    <i className="menu-bullet menu-bullet-dot">
+                                        <span />
+                                    </i>
+                                    <span className="menu-text">Plan</span>
+                                    <i className="menu-arrow" />
                                 </NavLink>
+                                <div className="menu-submenu">
+                                    <i className="menu-arrow" />
+                                    <ul className="menu-subnav">
+                                        {/*begin::3 Level*/}
+                                        <li
+                                            className={`menu-item ${getMenuItemActive(
+                                                "/plan-list"
+                                            )}`}
+                                            aria-haspopup="true"
+                                        >
+                                            <NavLink
+                                                className="menu-link"
+                                                to="/plan-list"
+                                            >
+                                                <i className="menu-bullet menu-bullet-dot">
+                                                    <span />
+                                                </i>
+                                                <span className="menu-text">Plan List</span>
+                                            </NavLink>
+                                        </li>
+                                        {/*end::3 Level*/}
+
+                                        {/*begin::3 Level*/}
+                                        <li
+                                            className={`menu-item ${getMenuItemActive(
+                                                "/plan-add"
+                                            )}`}
+                                            aria-haspopup="true"
+                                        >
+                                            <NavLink
+                                                className="menu-link"
+                                                to="/plan-add"
+                                            >
+                                                <i className="menu-bullet menu-bullet-dot">
+                                                    <span />
+                                                </i>
+                                                <span className="menu-text">Plan Add</span>
+                                            </NavLink>
+                                        </li>
+                                        {/*end::3 Level*/}
+                                    </ul>
+                                </div>
                             </li>
                             {/*end::2 Level*/}
 
-
+                            {/* Surfaces */}
                             {/*begin::2 Level*/}
-                            {/*<li*/}
-                            {/*    className={`menu-item ${getMenuItemActive("/error/error-v3")}`}*/}
-                            {/*    aria-haspopup="true"*/}
-                            {/*>*/}
-                            {/*    <NavLink className="menu-link" to="/error/error-v3">*/}
-                            {/*        <i className="menu-bullet menu-bullet-dot">*/}
-                            {/*            <span />*/}
-                            {/*        </i>*/}
-                            {/*        <span className="menu-text">Error Page - 3</span>*/}
-                            {/*    </NavLink>*/}
-                            {/*</li>*/}
+                            <li
+                                className={`menu-item menu-item-submenu ${getMenuItemActive(
+                                    "/store-list",
+                                    true
+                                )}`}
+                                aria-haspopup="true"
+                                data-menu-toggle="hover"
+                            >
+                                <NavLink
+                                    className="menu-link menu-toggle"
+                                    to="/store-list"
+                                >
+                                    <i className="menu-bullet menu-bullet-dot">
+                                        <span />
+                                    </i>
+                                    <span className="menu-text">Stores</span>
+                                    <i className="menu-arrow" />
+                                </NavLink>
+                                <div className="menu-submenu">
+                                    <i className="menu-arrow" />
+                                    <ul className="menu-subnav">
+                                        {/*begin::3 Level*/}
+                                        <li
+                                            className={`menu-item ${getMenuItemActive(
+                                                "/store-list"
+                                            )}`}
+                                            aria-haspopup="true"
+                                        >
+                                            <NavLink
+                                                className="menu-link"
+                                                to="/store-list"
+                                            >
+                                                <i className="menu-bullet menu-bullet-dot">
+                                                    <span />
+                                                </i>
+                                                <span className="menu-text">Store List</span>
+                                            </NavLink>
+                                        </li>
+                                        {/*end::3 Level*/}
+
+                                        {/*begin::3 Level*/}
+                                        <li
+                                            className={`menu-item ${getMenuItemActive(
+                                                "/store-add"
+                                            )}`}
+                                            aria-haspopup="true"
+                                        >
+                                            <NavLink
+                                                className="menu-link"
+                                                to="/store-add"
+                                            >
+                                                <i className="menu-bullet menu-bullet-dot">
+                                                    <span />
+                                                </i>
+                                                <span className="menu-text">Store Add</span>
+                                            </NavLink>
+                                        </li>
+                                        {/*end::3 Level*/}
+                                    </ul>
+                                </div>
+                            </li>
                             {/*end::2 Level*/}
-
-
                         </ul>
                     </div>
                 </li>
-
-
+                {/*end::1 Level*/}
             </ul>
-
             {/* end::Menu Nav */}
         </>
     );

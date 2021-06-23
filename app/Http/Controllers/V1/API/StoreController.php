@@ -54,7 +54,16 @@ class StoreController extends Controller
         return $this->sendSuccess('Store Created Successfully');
     }
 
-
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function show($id)
+    {
+        return $this->sendResponse($this->storeRepo->find($id),"Store found successfully with Id ".$id);
+    }
 
     /**
      * Update the specified resource in storage.
@@ -68,7 +77,7 @@ class StoreController extends Controller
         $storeId = $store->id;
         $request->validate($this->updateStoreRules);
         $inputs = $request->only(['name','email']);
-        $this->productRepo->edit($inputs,$storeId);
+        $this->storeRepo->edit($inputs,$storeId);
         return $this->sendSuccess("Store updated successfully with Id ".$storeId);
     }
 

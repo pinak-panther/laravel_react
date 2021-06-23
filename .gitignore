@@ -13,5 +13,7 @@ npm-debug.log
 yarn-error.log
 /.idea
 /.vscode
-/publi/js
-/publi/css
+/publi/js/*
+/publi/css/*
+/.phpstorm.meta.php
+/_ide_helper_models.php
