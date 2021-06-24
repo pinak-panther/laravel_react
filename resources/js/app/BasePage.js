@@ -47,6 +47,7 @@ export default function BasePage() {
             <ContentRoute path="/application-list" component={ListApplication} />
             <ContentRoute path="/application-add" component={AddApplication} />
             <ContentRoute path="/application-edit/:id" component={EditApplication} />
+            <ContentRoute path="/filtered-list/:planId/:appId" component={FilteredStore} />
 
             {/*Plan Routes*/}
             <ContentRoute path="/plan-list" component={ListPlan} />
@@ -55,7 +56,6 @@ export default function BasePage() {
 
             {/*Store Routes*/}
             <ContentRoute path="/store-list" exact component={ListStore} />
-            <ContentRoute path="/filtered-list/:planId/:appId" component={FilteredStore} />
             <ContentRoute path="/store-add" component={AddStore} />
             <ContentRoute path="/store-edit/:id" component={EditStore} />
 

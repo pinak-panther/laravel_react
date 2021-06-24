@@ -1,12 +1,13 @@
 
 import React, {useState} from 'react';
-import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import {Button, MenuItem} from "@material-ui/core";
 import {API} from "../../../_metronic/_helpers/AxiosHelper";
 import {useHistory} from 'react-router-dom'
 import {connect} from "react-redux";
+import * as Yup from 'yup';
+import {useFormik} from "formik";
 
 const useStyles = makeStyles(theme => ({
     container: {
@@ -23,23 +24,14 @@ const useStyles = makeStyles(theme => ({
     menu: {
         width: 200,
     },
+    error:{
+        paddingLeft:10,
+        color:"red"
+    }
 }));
 function AddPlan(props) {
     const classes = useStyles();
     const history = useHistory();
-    const [name,setName]=useState('');
-    const [price,setPrice]=useState('');
-    const [duration,setDuration]=useState('');
-
-    const handleNameChange = (event)=>{
-        setName(event.target.value);
-    }
-    const handlePriceChange = (event)=>{
-        setPrice(event.target.value);
-    }
-    const handleDurationChange = (event)=>{
-        setDuration(event.target.value);
-    }
 
     const prepareAuthHeader = ()=>{
         return {
@@ -49,12 +41,8 @@ function AddPlan(props) {
         }
     }
 
-    const handleFormSubmit = (event) =>{
-        event.preventDefault();
-        let data = {
-            name,price,duration
-        }
-        API.post('plan',data,prepareAuthHeader())
+    function handleFormikSubmit(values) {
+        API.post('plan',values,prepareAuthHeader())
             .then(response=>{
                 history.push('/plan-list');
             })
@@ -62,37 +50,62 @@ function AddPlan(props) {
                 console.error(err);
             })
     }
-
+    const validationSchema = ()=>Yup.object({
+            name:Yup.string()
+                .required('Name is Required Field'),
+            price:Yup.string()
+                .required('Price is Required Field'),
+            duration:Yup.string()
+                .required('Duration is Required Field')
+    });
+    const formik = useFormik({
+        initialValues:{
+            name:'',
+            price:'',
+            duration:''
+        },
+        onSubmit:values => handleFormikSubmit(values),
+        validationSchema,
+    })
 
     return (
-        <form className={classes.container} style={{display:"inline"}} noValidate autoComplete="off" onSubmit={(event)=>{handleFormSubmit(event)}}>
+        <form className={classes.container} style={{display:"inline"}} noValidate autoComplete="off" onSubmit={formik.handleSubmit}>
             <TextField
                 id="name"
+                name="name"
                 label="Name"
                 className={classes.textField}
-                value={name}
-                onChange={(event)=>handleNameChange(event)}
+                value={formik.values.name}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
                 margin="normal"
                 variant="filled"
             />
+            {formik.errors.name && formik.touched.name ? <div className={classes.error}>{formik.errors.name.toUpperCase()}</div> : null}
             <TextField
                 id="price"
+                name="price"
                 label="Price"
                 className={classes.textField}
-                value={price}
-                onChange={(event)=>{handlePriceChange(event)}}
+                value={formik.values.price}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
                 margin="normal"
                 variant="filled"
             />
+            {formik.errors.price && formik.touched.price ? <div className={classes.error}>{formik.errors.price.toUpperCase()}</div> : null}
             <TextField
                 id="duration"
+                name="duration"
                 label="Duration"
                 className={classes.textField}
-                value={duration}
-                onChange={(event)=>{handleDurationChange(event)}}
+                value={formik.values.duration}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
                 margin="normal"
                 variant="filled"
             />
+            {formik.errors.duration && formik.touched.duration ? <div className={classes.error}>{formik.errors.duration.toUpperCase()}</div> : null}
             <div style={{textAlign:"center"}}>
                 <Button variant="contained" type={"submit"} color={'secondary'} size={'large'} >
                     Add Plan

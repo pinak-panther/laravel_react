@@ -6,6 +6,8 @@ import {Button, MenuItem} from "@material-ui/core";
 import {API} from "../../../_metronic/_helpers/AxiosHelper";
 import {useHistory} from 'react-router-dom'
 import {connect} from "react-redux";
+import {useFormik} from "formik";
+import * as Yup from 'yup';
 
 const useStyles = makeStyles(theme => ({
     container: {
@@ -22,19 +24,14 @@ const useStyles = makeStyles(theme => ({
     menu: {
         width: 200,
     },
+    error:{
+        paddingLeft:10,
+        color:"red"
+    }
 }));
 function AddStore(props) {
     const classes = useStyles();
     const history = useHistory();
-    const [name,setName]=useState('');
-    const [email,setEmail]=useState('');
-
-    const handleNameChange = (event)=>{
-        setName(event.target.value);
-    }
-    const handleEmailChange = (event)=>{
-        setEmail(event.target.value);
-    }
 
     const prepareAuthHeader = ()=>{
         return {
@@ -44,12 +41,18 @@ function AddStore(props) {
         }
     }
 
-    const handleFormSubmit = (event) =>{
-        event.preventDefault();
-        let data = {
-            name,email
+    const validationSchema = Yup.object(
+        {
+            name:Yup.string()
+                .required('Name Field is Required'),
+            email:Yup.string()
+                .required('Email Field is Required')
+                .email('Please provide valid Email')
         }
-        API.post('store',data,prepareAuthHeader())
+    )
+
+    const formikSubmitHandler = (values) => {
+        API.post('store',values,prepareAuthHeader())
             .then(response=>{
                 history.push('/store-list');
             })
@@ -58,27 +61,41 @@ function AddStore(props) {
             })
     }
 
+    const formik = useFormik({
+        initialValues:{
+            name:'',
+            email:'',
+        },
+        validationSchema,
+        onSubmit:values => formikSubmitHandler(values)
+    })
 
     return (
-        <form className={classes.container} style={{display:"inline"}} noValidate autoComplete="off" onSubmit={(event)=>{handleFormSubmit(event)}}>
+        <form className={classes.container} style={{display:"inline"}} noValidate autoComplete="off" onSubmit={formik.handleSubmit}>
             <TextField
                 id="name"
+                name="name"
                 label="Name"
                 className={classes.textField}
-                value={name}
-                onChange={(event)=>handleNameChange(event)}
+                value={formik.values.name}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
                 margin="normal"
                 variant="filled"
             />
+            {formik.touched.name && formik.errors.name ? <div className={classes.error}>{formik.errors.name.toUpperCase()}</div>:null}
             <TextField
                 id="email"
+                name="email"
                 label="Email"
                 className={classes.textField}
-                value={email}
-                onChange={(event)=>{handleEmailChange(event)}}
+                value={formik.values.email}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
                 margin="normal"
                 variant="filled"
             />
+            {formik.touched.email && formik.errors.email ? <div className={classes.error}>{formik.errors.email.toUpperCase()}</div>:null}
             <div style={{textAlign:"center"}}>
                 <Button variant="contained" type={"submit"} color={'secondary'} size={'large'} >
                     Add Store

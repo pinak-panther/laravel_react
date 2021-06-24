@@ -7,6 +7,9 @@ import {Button, MenuItem} from "@material-ui/core";
 import {API} from "../../../_metronic/_helpers/AxiosHelper";
 import {useHistory} from 'react-router-dom'
 import {connect} from "react-redux";
+import {useFormik} from "formik";
+import * as Yup from 'yup';
+
 const useStyles = makeStyles(theme => ({
     container: {
         display: 'flex',
@@ -22,26 +25,34 @@ const useStyles = makeStyles(theme => ({
     menu: {
         width: 200,
     },
+    error:{
+        paddingLeft:10,
+        color:"red"
+    }
 }));
+
+const initialValues = {
+    name:'',
+    description:'',
+}
+
+const validationSchema = ()=>Yup.object({
+    name:Yup.object()
+        .required('Name Field is Required !!'),
+    description:Yup.object()
+        .required('Description Field is Required !!'),
+})
 function AddApplication(props) {
     const classes = useStyles();
     const history = useHistory();
-    const [name,setName]=useState('');
-    const [description,setDescription]=useState('');
+    const formik = useFormik({
+        initialValues,
+        validationSchema,
+        onSubmit:values => formikHandleSubmit(values)
+    });
 
-    const handleNameChange = (event)=>{
-        setName(event.target.value);
-    }
-    const handleDescriptionChange = (event)=>{
-        setDescription(event.target.value);
-    }
-
-    const handleFormSubmit = (event) =>{
-        event.preventDefault();
-        let data = {
-            name,description
-        }
-        API.post('application',data,prepareAuthHeader())
+    const formikHandleSubmit = (values)=>{
+        API.post('application',values,prepareAuthHeader())
             .then(response=>{
                 history.push('/application-list');
             })
@@ -58,25 +69,32 @@ function AddApplication(props) {
     }
 
     return (
-        <form className={classes.container} style={{display:"inline"}} noValidate autoComplete="off" onSubmit={(event)=>{handleFormSubmit(event)}}>
+        <form className={classes.container} style={{display:"inline"}} noValidate autoComplete="off" onSubmit={formik.handleSubmit}>
             <TextField
                 id="name"
                 label="Name"
                 className={classes.textField}
-                value={name}
-                onChange={(event)=>handleNameChange(event)}
+                value={formik.values.name}
+                onChange={formik.handleChange}
                 margin="normal"
                 variant="filled"
+                name="name"
+                onBlur={formik.handleBlur}
             />
+            {formik.errors.name && formik.touched.name ? <div className={classes.error}>{formik.errors.name.toUpperCase()}</div> : null}
             <TextField
                 id="description"
                 label="description"
                 className={classes.textField}
-                value={description}
-                onChange={(event)=>{handleDescriptionChange(event)}}
+                value={formik.values.description}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
                 margin="normal"
                 variant="filled"
+                name="description"
             />
+            {formik.errors.description && formik.touched.description? <div className={classes.error}>{formik.errors.description.toUpperCase()}</div> : null}
+
             <div style={{textAlign:"center"}}>
                 <Button variant="contained" type={"submit"} color={'secondary'} size={'large'} >
                     Add Application
