@@ -7,7 +7,7 @@ import {API} from "../../../_metronic/_helpers/AxiosHelper";
 import {useHistory} from 'react-router-dom'
 import {connect} from "react-redux";
 import * as Yup from 'yup';
-import {useFormik} from "formik";
+import {Formik,Form,Field,ErrorMessage} from "formik";
 
 const useStyles = makeStyles(theme => ({
     container: {
@@ -50,68 +50,36 @@ function AddPlan(props) {
                 console.error(err);
             })
     }
-    const validationSchema = ()=>Yup.object({
+    const validationSchema = Yup.object({
             name:Yup.string()
-                .required('Name is Required Field'),
+                .required('NAME IS REQUIRED FIELD'),
             price:Yup.string()
-                .required('Price is Required Field'),
+                .required('PRICE IS REQUIRED FIELD'),
             duration:Yup.string()
-                .required('Duration is Required Field')
+                .required('DURATION IS REQUIRED FIELD')
     });
-    const formik = useFormik({
-        initialValues:{
+
+    const initialValues={
             name:'',
             price:'',
             duration:''
-        },
-        onSubmit:values => handleFormikSubmit(values),
-        validationSchema,
-    })
-
+        }
     return (
-        <form className={classes.container} style={{display:"inline"}} noValidate autoComplete="off" onSubmit={formik.handleSubmit}>
-            <TextField
-                id="name"
-                name="name"
-                label="Name"
-                className={classes.textField}
-                value={formik.values.name}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                margin="normal"
-                variant="filled"
-            />
-            {formik.errors.name && formik.touched.name ? <div className={classes.error}>{formik.errors.name.toUpperCase()}</div> : null}
-            <TextField
-                id="price"
-                name="price"
-                label="Price"
-                className={classes.textField}
-                value={formik.values.price}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                margin="normal"
-                variant="filled"
-            />
-            {formik.errors.price && formik.touched.price ? <div className={classes.error}>{formik.errors.price.toUpperCase()}</div> : null}
-            <TextField
-                id="duration"
-                name="duration"
-                label="Duration"
-                className={classes.textField}
-                value={formik.values.duration}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                margin="normal"
-                variant="filled"
-            />
-            {formik.errors.duration && formik.touched.duration ? <div className={classes.error}>{formik.errors.duration.toUpperCase()}</div> : null}
-            <div style={{textAlign:"center"}}>
-                <Button variant="contained" type={"submit"} color={'secondary'} size={'large'} >
-                    Add Plan
-                </Button>
-            </div>
-        </form>
+        <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={values => handleFormikSubmit(values)}>
+            <Form autoComplete="off" noValidate className={classes.container} style={{display:"inline"}}>
+                <Field name="name" as={TextField} margin="normal" variant="filled" className={classes.textField} id="name" label="Name"/>
+                <ErrorMessage name="name" className={classes.error} component="div"/>
+                <Field name="price" as={TextField} margin="normal" variant="filled" className={classes.textField} id="price" label="Price"/>
+                <ErrorMessage name="price" className={classes.error} component="div"/>
+                <Field name="duration" as={TextField} margin="normal" variant="filled" className={classes.textField} id="duration" label="Duration"/>
+                <ErrorMessage name="duration" className={classes.error} component="div"/>
+                <div style={{textAlign:"center"}}>
+                   <Button variant="contained" type={"submit"} color={'secondary'} size={'large'} >
+                     Add Plan
+                   </Button>
+                </div>
+            </Form>
+        </Formik>
     );
 }
 

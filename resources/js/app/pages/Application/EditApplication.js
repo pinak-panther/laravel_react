@@ -6,7 +6,7 @@ import {Button} from "@material-ui/core";
 import {API} from "../../../_metronic/_helpers/AxiosHelper";
 import {useHistory} from "react-router-dom";
 import {connect} from "react-redux";
-import {useFormik} from "formik";
+import {Formik,Field,ErrorMessage,Form} from "formik";
 import * as Yup from 'yup';
 
 const useStyles = makeStyles(theme => ({
@@ -65,55 +65,27 @@ function EditApplication(props) {
             })
     },[]);
 
-    const validationSchema = ()=>Yup.object({
-            name:Yup.string()
-                .required('Name Field is Required Field !!'),
-            description:Yup.string()
-                .required('Description is Required Field !!')
-        });
-
-
-    const formik = useFormik({
-        initialValues:{
-            name,
-            description,
-        },
-        enableReinitialize:true,
-        validationSchema,
-        onSubmit:values=>formikHandleSubmit(values),
-    });
+    const validationSchema = Yup.object({
+        name:Yup.string()
+            .required('NAME FIELD IS REQUIRED !!'),
+        description:Yup.string()
+            .required('DESCRIPTION FIELD IS REQUIRED !!'),
+    })
+    const initialValues={name,description};
     return (
-        <form className={classes.container} style={{display:"inline"}} noValidate autoComplete="off" onSubmit={formik.handleSubmit}>
-            <TextField
-                id="name"
-                name="name"
-                label="Name"
-                className={classes.textField}
-                value={formik.values.name}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                margin="normal"
-                variant="filled"
-            />
-            {formik.errors.name && formik.touched.name ? <div className={classes.error}>{formik.errors.name.toUpperCase()}</div> : null}
-            <TextField
-                id="description"
-                name="description"
-                label="Description"
-                className={classes.textField}
-                value={formik.values.description}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                margin="normal"
-                variant="filled"
-            />
-            {formik.errors.description && formik.touched.description ? <div className={classes.error}>{formik.errors.description.toUpperCase()}</div> : null}
-            <div style={{textAlign:"center"}}>
-                <Button variant="contained" type={"submit"} color={'secondary'} size={'large'}>
-                    Edit Application
-                </Button>
-            </div>
-        </form>
+        <Formik  initialValues={initialValues} enableReinitialize={true} validationSchema={validationSchema} onSubmit={values=>formikHandleSubmit(values)}>
+            <Form autoComplete="off" noValidate className={classes.container} style={{display:"inline"}}>
+                <Field name="name" as={TextField} margin="normal" variant="filled" id="name" label="Name" className={classes.textField}/>
+                <ErrorMessage name="name" className={classes.error} component={'div'}/>
+                <Field name="description" as={TextField} margin="normal" variant="filled" id="description" label="Description" className={classes.textField}/>
+                <ErrorMessage name="description" className={classes.error} component={'div'}/>
+                <div style={{textAlign:"center"}}>
+                    <Button variant="contained" type={"submit"} color={'secondary'} size={'large'} >
+                        Add Application
+                    </Button>
+                </div>
+            </Form>
+        </Formik>
     );
 }
 const mapStateToProps = (state,ownProps)=>{

@@ -82,8 +82,8 @@ class PlanController extends Controller
     {
         $planId = $plan->id;
         $request->validate($this->updatePlanRules);
-        $inputs = $request->only(['name','description','price']);
-        $this->productRepo->edit($inputs,$planId);
+        $inputs = $request->only(['name','price','duration']);
+        $this->planRepo->edit($inputs,$planId);
         return $this->sendSuccess("Plan updated successfully with Id ".$planId);
     }
 
