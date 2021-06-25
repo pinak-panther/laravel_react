@@ -66,9 +66,6 @@ function createData(id,name, description, price, category) {
     return { id, name, description, price, category };
 }
 
-function createPlanData(id,name, price, duration) {
-    return { id, name, price, duration };
-}
 
 function ListApplication(props) {
     const classes = useStyles();
