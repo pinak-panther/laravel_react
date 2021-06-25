@@ -1,7 +1,7 @@
 
 import React, {useEffect, useState} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import {Button, FilledInput, FormControl, InputLabel, MenuItem, Select, TextField} from "@material-ui/core";
+import {Button, FilledInput, MenuItem, Select, TextField} from "@material-ui/core";
 import {API} from "../../../_metronic/_helpers/AxiosHelper";
 import {useHistory} from 'react-router-dom'
 import {connect} from "react-redux";
@@ -84,7 +84,6 @@ function AddPlan(props) {
             })
         }
         return null;
-
     };
 
     return (
