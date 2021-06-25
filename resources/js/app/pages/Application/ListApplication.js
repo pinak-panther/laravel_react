@@ -83,7 +83,7 @@ function ListApplication(props) {
     const [selectedPlan,setSelectedPlan]=useState(2);
     const [planDialog,setPlanDialog]=useState(false);
 
-    const loadApplicatons = () => {
+    const loadApplications = () => {
         API.get(`application?page=${page}`,prepareAuthHeader())
             .then(response => {
                 setLoading(response.data.data.next_page_url == null ? false : true);
@@ -110,7 +110,7 @@ function ListApplication(props) {
     }
 
     useEffect(()=>{
-        loadApplicatons();
+        loadApplications();
     },[changeFlag]);
 
     const userClickHandler = (id)=>{

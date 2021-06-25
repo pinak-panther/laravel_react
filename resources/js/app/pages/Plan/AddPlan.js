@@ -1,8 +1,7 @@
 
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import TextField from '@material-ui/core/TextField';
-import {Button, MenuItem} from "@material-ui/core";
+import {Button, FilledInput, FormControl, InputLabel, MenuItem, Select, TextField} from "@material-ui/core";
 import {API} from "../../../_metronic/_helpers/AxiosHelper";
 import {useHistory} from 'react-router-dom'
 import {connect} from "react-redux";
@@ -32,7 +31,7 @@ const useStyles = makeStyles(theme => ({
 function AddPlan(props) {
     const classes = useStyles();
     const history = useHistory();
-
+    const [apps, setApps] = useState([]);
     const prepareAuthHeader = ()=>{
         return {
             headers: {
@@ -62,11 +61,47 @@ function AddPlan(props) {
     const initialValues={
             name:'',
             price:'',
-            duration:''
+            duration:'',
+            application:1
         }
+        useEffect(()=>{
+            API.get(`/application?perPage=100`,prepareAuthHeader())
+                .then(response=>{
+                    let allPlans = response.data.data.data
+                    let tempArray =[]
+                    allPlans.map(plan=>{
+                        tempArray.push({id:plan.id,name:plan.name})
+                    })
+                    setApps(tempArray);
+                }).catch(error=>console.log(error))
+        },[])
+
+
+    const allApps = ()=>{
+        if (apps.length > 0){
+            return apps.map(app=>{
+                return (<MenuItem value={app.id} key={app.id}>{app.name}</MenuItem>)
+            })
+        }
+        return null;
+
+    };
+
     return (
-        <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={values => handleFormikSubmit(values)}>
+        <Formik initialValues={initialValues} enableReinitialize validationSchema={validationSchema} onSubmit={values => handleFormikSubmit(values)}>
             <Form autoComplete="off" noValidate className={classes.container} style={{display:"inline"}}>
+                <Field name="application" margin="normal" variant="filled"  id="application" label="Application">
+                    {({field,form,meta})=>{
+                        return (
+                            <Select value={field.value} onChange={field.onChange}
+                                    className={classes.textField} style={{width:'100%'}}
+                                    input={<FilledInput name={field.name} id={field.name}  />}
+                            >
+                            {allApps()}
+                            </Select>
+                        )
+                    }}
+                </Field>
                 <Field name="name" as={TextField} margin="normal" variant="filled" className={classes.textField} id="name" label="Name"/>
                 <ErrorMessage name="name" className={classes.error} component="div"/>
                 <Field name="price" as={TextField} margin="normal" variant="filled" className={classes.textField} id="price" label="Price"/>
