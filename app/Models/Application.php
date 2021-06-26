@@ -12,6 +12,6 @@ class Application extends Model
     protected $fillable = ['name','description'];
     public function stores()
     {
-        return $this->belongsToMany(Store::class,'application_store')->withPivot('plan_id');
+        return $this->hasMany(Store::class,'application_id','id');
     }
 }

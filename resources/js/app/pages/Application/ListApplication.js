@@ -74,11 +74,6 @@ function ListApplication(props) {
     const [changeFlag,setChangFlag] = useState(true);
     const [page,setPage]=useState(1);
     const [loading,setLoading]=useState(false);
-    const [open, setOpen] = useState(false);
-    const [selectedId,setSelectedId]=useState('');
-    const [plan,setPlan]=useState([]);
-    const [selectedPlan,setSelectedPlan]=useState(2);
-    const [planDialog,setPlanDialog]=useState(false);
 
     const loadApplications = () => {
         API.get(`application?page=${page}`,prepareAuthHeader())
@@ -93,15 +88,6 @@ function ListApplication(props) {
                         tempArr.push(createData(application.id, application.name, application.description));
                     });
                     setApplication(prevState => prevState.concat(tempArr));
-                    API.get(`plan?perPage=100`,prepareAuthHeader()).then(planResponse=>{
-                        let planData = planResponse.data.data;
-                        let plans = planData.data;
-                        let plansArray = [];
-                        plans.map(singlePlan =>{
-                            plansArray.push(createPlanData(singlePlan.id,singlePlan.name,singlePlan.price,singlePlan.duration));
-                        })
-                        setPlan(plansArray);
-                    }).catch(err => console.error(err));
                 }
             }).catch(err => console.error(err))
     }
@@ -120,51 +106,20 @@ function ListApplication(props) {
             },
         }
     }
-    const userDeleteHandler = () =>{
-         API.delete(`application/${selectedId}`,prepareAuthHeader()).then(response=>{
-             let filteredApplication = application.filter(singleApplication => singleApplication.id != selectedId);
-             setApplication(filteredApplication);
-             setSelectedId('');
-             setOpen(false);
-         })
-    }
 
     const loadMoreClickHandler = () => {
         setChangFlag(!changeFlag);
     }
 
-    function handleClickOpen(id) {
-        setSelectedId(id);
-        setOpen(true);
-    }
+    const handleViewStoreClick = id => {
+        history.push(`/store-filtered/${id}`)
+    };
 
-    const planClickHandler = (id) => {
-        setSelectedId(id);
-        setPlanDialog(true);
-    }
-
-    const applyPlanFilter = () => {
-        setPlanDialog(false);
-        // history.push(`/store-list/${selectedPlan}/${selectedId}`);
-        history.push(`/filtered-list/${selectedPlan}/${selectedId}`);
-    }
-
-    const prepareRadioButtonContent = (plansArray)=>{
-        if(plansArray){
-            let content = plansArray.map(plan=>{
-                return (
-                    <FormControlLabel
-                        key={plan.id}
-                        value={plan.id}
-                        control={<Radio color="secondary" />}
-                        label={plan.name}
-                        labelPlacement="bottom"
-                    />
-                )
-            });
-            return content;
-        }
-        return null;
+    function planClickHandler(id) {
+        return window.open(
+            'https://apps.shopify.com',
+            '_blank' //
+        );
     }
 
     return (
@@ -174,7 +129,7 @@ function ListApplication(props) {
                     <TableRow>
                         <StyledTableCell>Name</StyledTableCell>
                         <StyledTableCell align="center">Description</StyledTableCell>
-                        <StyledTableCell align="center">Select Plan</StyledTableCell>
+                        <StyledTableCell align="center">View Store</StyledTableCell>
                         <StyledTableCell align="center">Actions</StyledTableCell>
                     </TableRow>
                 </TableHead>
@@ -184,11 +139,11 @@ function ListApplication(props) {
                             <StyledTableCell component="th" scope="row"> {row.name} </StyledTableCell>
                             <StyledTableCell align="center">{row.description}</StyledTableCell>
                             <StyledTableCell align="center">
-                                <Button size="small" variant="contained" onClick={(event)=>planClickHandler(row.id)} color={"secondary"} className={classes.margin}> Select Plan </Button>
+                                <Button size="small" variant="contained" onClick={(event)=>handleViewStoreClick(row.id)} color={"secondary"}> View Store </Button>
                             </StyledTableCell>
                             <StyledTableCell align="center">
                                 <Button size="small" variant="contained" onClick={(event)=>userClickHandler(row.id)} color={"secondary"} className={classes.margin}> Update </Button>
-                                <Button size="small" variant="contained" onClick={(event)=>handleClickOpen(row.id)} color={"secondary"}> Delete </Button>
+                                <Button size="small" variant="contained" onClick={(event)=>planClickHandler(row.id)} color={"secondary"} className={classes.margin}> Show Plan </Button>
                             </StyledTableCell>
 
                         </StyledTableRow>
@@ -198,51 +153,6 @@ function ListApplication(props) {
             <div className={classes.loadMore}>
             <Button variant="contained" disabled={!loading} onClick={()=>{loadMoreClickHandler()}} color={"secondary"} size={"large"} className={classes.button}>Load More</Button>
             </div>
-            <Dialog
-                open={open}
-                onClose={()=>setOpen(false)}
-                aria-labelledby="alert-dialog-title"
-                aria-describedby="alert-dialog-description"
-            >
-                <DialogTitle id="alert-dialog-title">{"Application Delete Alert"}</DialogTitle>
-                <DialogContent>
-                    <DialogContentText id="alert-dialog-description">
-                      Are you sure you want to delete this Application ?
-                    </DialogContentText>
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={()=>setOpen(false)} color="secondary" variant="contained" size={'small'}>
-                        Disagree
-                    </Button>
-                    <Button variant="contained" onClick={()=>userDeleteHandler()} color="secondary" autoFocus size={'small'}>
-                        Agree
-                    </Button>
-                </DialogActions>
-            </Dialog>
-
-            <Dialog
-                open={planDialog}
-                onClose={()=>setPlanDialog(false)}
-                aria-labelledby="alert-dialog-title"
-                aria-describedby="alert-dialog-description"
-            >
-                <DialogTitle id="alert-dialog-title">{"Select Below Plan"}</DialogTitle>
-                <DialogContent>
-                    <FormControl component="fieldset">
-                        <RadioGroup aria-label="planRadio" name="planRadio" value={parseInt(selectedPlan)} onChange={()=>setSelectedPlan(event.target.value)} row>
-                            {prepareRadioButtonContent(plan)}
-                        </RadioGroup>
-                    </FormControl>
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={()=>setPlanDialog(false)} color="secondary" variant="contained" size={'small'}>
-                        Cancel
-                    </Button>
-                    <Button variant="contained" onClick={()=>applyPlanFilter()} color="secondary" autoFocus size={'small'}>
-                        Apply
-                    </Button>
-                </DialogActions>
-            </Dialog>
         </Paper>
     );
 }

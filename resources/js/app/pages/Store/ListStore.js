@@ -8,8 +8,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import {API} from "../../../_metronic/_helpers/AxiosHelper";
-import {useHistory, useParams} from "react-router-dom";
-import {Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle} from "@material-ui/core";
+import {Button} from "@material-ui/core";
 import {connect} from "react-redux";
 
 
@@ -56,21 +55,16 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-function createData(id,email, name) {
-    return { id, email, name};
+function createData(id,email, name,current_plan,status) {
+    return { id, email, name, current_plan,status};
 }
 
 function ListStore(props) {
     const classes = useStyles();
-    const history = useHistory();
     const [store,setStore] = useState([]);
     const [changeFlag,setChangFlag] = useState(true);
     const [page,setPage]=useState(1);
     const [loading,setLoading]=useState(false);
-    const [open, setOpen] = useState(false);
-    const [selectedId,setSelectedId]=useState('');
-    const params = useParams();
-    const {planId,appId} = params;
 
     const loadStores = (url) => {
         API.get(url,prepareAuthHeader())
@@ -82,7 +76,7 @@ function ListStore(props) {
                 if (stores.length > 0) {
                     let tempArr = [];
                     stores.map(store => {
-                        tempArr.push(createData(store.id, store.email, store.name));
+                        tempArr.push(createData(store.id, store.email, store.name, store.current_plan, store.status));
                     });
                     setStore(prevState => prevState.concat(tempArr));
                 }
@@ -90,21 +84,10 @@ function ListStore(props) {
     }
 
     useEffect(()=>{
-        const url = planId && appId ? `/store?page=${page}&planId=${planId}&appId=${appId}`: `store?page=${page}`;
+        const url = `store?page=${page}`;
         loadStores(url);
     },[changeFlag]);
 
-    const userClickHandler = (id)=>{
-       history.push(`/store-edit/${id}`);
-    }
-    const userDeleteHandler = () =>{
-         API.delete(`store/${selectedId}`,prepareAuthHeader()).then(response=>{
-             let filteredStore = store.filter(singleStore => singleStore.id != selectedId);
-             setStore(filteredStore);
-             setSelectedId('');
-             setOpen(false);
-         })
-    }
     const prepareAuthHeader = ()=>{
         return {
             headers: {
@@ -117,11 +100,6 @@ function ListStore(props) {
         setChangFlag(!changeFlag);
     }
 
-    function handleClickOpen(id) {
-        setSelectedId(id);
-        setOpen(true);
-    }
-
     return (
         <Paper className={classes.root}>
             <Table className={classes.table}>
@@ -129,7 +107,8 @@ function ListStore(props) {
                     <TableRow>
                         <StyledTableCell>Domain</StyledTableCell>
                         <StyledTableCell align="center">Email</StyledTableCell>
-                        <StyledTableCell align="center">Actions</StyledTableCell>
+                        <StyledTableCell align="center">Current Plan</StyledTableCell>
+                        <StyledTableCell align="center">Status</StyledTableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
@@ -137,11 +116,8 @@ function ListStore(props) {
                         <StyledTableRow key={row.id} >
                             <StyledTableCell component="th" scope="row"> {row.name} </StyledTableCell>
                             <StyledTableCell align="center">{row.email}</StyledTableCell>
-                            <StyledTableCell align="center">
-                                <Button size="small" variant="contained" onClick={(event)=>userClickHandler(row.id)} color={"secondary"} className={classes.margin}> Update </Button>
-                                <Button size="small" variant="contained" onClick={(event)=>handleClickOpen(row.id)} color={"secondary"}> Delete </Button>
-                            </StyledTableCell>
-
+                            <StyledTableCell align="center">{row.current_plan}</StyledTableCell>
+                            <StyledTableCell align="center">{row.status == 1 ? 'Enable' : 'Disable'}</StyledTableCell>
                         </StyledTableRow>
                     ))}
                 </TableBody>
@@ -149,27 +125,6 @@ function ListStore(props) {
             <div className={classes.loadMore}>
             <Button variant="contained" disabled={!loading} onClick={()=>{loadMoreClickHandler()}} color={"secondary"} size={"large"} className={classes.button}>Load More</Button>
             </div>
-            <Dialog
-                open={open}
-                onClose={()=>setOpen(false)}
-                aria-labelledby="alert-dialog-title"
-                aria-describedby="alert-dialog-description"
-            >
-                <DialogTitle id="alert-dialog-title">{"Store Delete Alert"}</DialogTitle>
-                <DialogContent>
-                    <DialogContentText id="alert-dialog-description">
-                      Are you sure you want to delete this Store ?
-                    </DialogContentText>
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={()=>setOpen(false)} color="secondary" variant="contained" size={'small'}>
-                        Disagree
-                    </Button>
-                    <Button variant="contained" onClick={()=>userDeleteHandler()} color="secondary" autoFocus size={'small'}>
-                        Agree
-                    </Button>
-                </DialogActions>
-            </Dialog>
         </Paper>
     );
 }

@@ -16,8 +16,8 @@ class StoreRepository implements StoreRepositoryInterface
         $sortField = $sort[0];
         $sortDirection = strtolower($sort[1]) == 'desc'?'DESC':'ASC';
         $perPage = $input['perPage'] ?? 10;
-        if(@$input['appId'] && @$input['planId']){
-            return Application::findOrFail($input['appId'])->stores()->wherePivot('plan_id',$input['planId'])->paginate($perPage);
+        if(@$input['appId']){
+            return Application::findOrFail($input['appId'])->stores()->paginate($perPage);
         }
         return Store::orderBy($sortField,$sortDirection)->paginate($perPage);
 
@@ -49,10 +49,13 @@ class StoreRepository implements StoreRepositoryInterface
      */
     public function store($inputs)
     {
-        return Store::create([
-            'name'=>$inputs['name'],
-            'email'=>$inputs['email']
-        ]);
+        return Store::updateOrCreate(
+            ['current_plan'=>$inputs['current_plan'],'application_id'=>$inputs['application_id'],'name'=>$inputs['name']],
+            [
+            'email'=>$inputs['email'],
+            'status'=>$inputs['status']
+            ]
+        );
     }
 
     /**
@@ -65,7 +68,9 @@ class StoreRepository implements StoreRepositoryInterface
         $store = $this->find($id);
         return $store->update([
             'name'=>$inputs['name'],
-            'email'=>$inputs['email']
+            'email'=>$inputs['email'],
+            'current_plan'=>$inputs['current_plan'],
+            'status'=>$inputs['status']
         ]);
     }
 }

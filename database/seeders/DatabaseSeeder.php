@@ -45,18 +45,18 @@ class DatabaseSeeder extends Seeder
         \App\Models\Application::factory(5)->create();
         \App\Models\Store::factory(10)->create();
 
-        for ($i=1;$i<6;$i++){
-            for($j=0;$j<11;$j++){
-                DB::table('application_store')->insert(
-                    [
-                        'application_id'=>$i,
-                        'store_id'=>$j,
-                        'plan_id'=>random_int(1,3)
-                ]
-                );
-            }
-
-        }
+//        for ($i=1;$i<6;$i++){
+//            for($j=0;$j<11;$j++){
+//                DB::table('application_store')->insert(
+//                    [
+//                        'application_id'=>$i,
+//                        'store_id'=>$j,
+//                        'plan_id'=>random_int(1,3)
+//                ]
+//                );
+//            }
+//
+//        }
 
     }
 }

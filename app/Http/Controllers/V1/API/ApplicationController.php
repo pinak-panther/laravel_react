@@ -6,6 +6,8 @@ use App\Models\Application;
 use App\Repository\ApplicationRepositoryInterface;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Validator;
+
 class ApplicationController extends Controller
 {
     //Validation Rules
@@ -32,7 +34,6 @@ class ApplicationController extends Controller
      */
     public function index(Request $request)
     {
-        //
         $inputs = $request->all();
         $applications = $this->appRepo->getAll($inputs);
         return $this->sendResponse($applications,'All Applications Retrieved Successfully');

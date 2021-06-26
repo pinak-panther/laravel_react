@@ -81,7 +81,7 @@ function EditApplication(props) {
                 <ErrorMessage name="description" className={classes.error} component={'div'}/>
                 <div style={{textAlign:"center"}}>
                     <Button variant="contained" type={"submit"} color={'secondary'} size={'large'} >
-                        Add Application
+                        Update Application
                     </Button>
                 </div>
             </Form>

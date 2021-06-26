@@ -8,14 +8,20 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 class StoreController extends Controller
 {
-    private $createStoreRules = [
+    private $updateStoreRules = [
+        'application_id'=>'required',
         'name'=>'required',
         'email'=>'required|email',
+        'current_plan'=>'required',
+        'status'=>'required|in:0,1',
     ];
 
-    private $updateStoreRules = [
+    private $createStoreRules = [
+        'application_id'=>'required',
         'name'=>'required',
         'email'=>'required|email',
+        'current_plan'=>'required',
+        'status'=>'required|in:0,1',
     ];
     /**
      * @var StoreRepositoryInterface
@@ -49,7 +55,7 @@ class StoreController extends Controller
     public function store(Request $request)
     {
         $request->validate($this->createStoreRules);
-        $inputs = $request->only(['name','email']);
+        $inputs = $request->only(['application_id','name','email','current_plan','status']);
         $this->storeRepo->store($inputs);
         return $this->sendSuccess('Store Created Successfully');
     }
@@ -76,7 +82,7 @@ class StoreController extends Controller
     {
         $storeId = $store->id;
         $request->validate($this->updateStoreRules);
-        $inputs = $request->only(['name','email']);
+        $inputs = $request->only(['application_id','name','email','current_plan','status']);
         $this->storeRepo->edit($inputs,$storeId);
         return $this->sendSuccess("Store updated successfully with Id ".$storeId);
     }

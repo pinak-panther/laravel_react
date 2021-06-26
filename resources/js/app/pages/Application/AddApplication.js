@@ -37,10 +37,10 @@ const initialValues = {
 }
 
 const validationSchema = Yup.object({
-    name:Yup.string()
-        .required('NAME FIELD IS REQUIRED !!'),
-    description:Yup.string()
-        .required('DESCRIPTION FIELD IS REQUIRED !!'),
+    // name:Yup.string()
+    //     .required('NAME FIELD IS REQUIRED !!'),
+    // description:Yup.string()
+    //     .required('DESCRIPTION FIELD IS REQUIRED !!'),
 })
 function AddApplication(props) {
     const classes = useStyles();

@@ -47,17 +47,17 @@ export default function BasePage() {
             <ContentRoute path="/application-list" component={ListApplication} />
             <ContentRoute path="/application-add" component={AddApplication} />
             <ContentRoute path="/application-edit/:id" component={EditApplication} />
-            <ContentRoute path="/filtered-list/:planId/:appId" component={FilteredStore} />
 
             {/*Plan Routes*/}
-            <ContentRoute path="/plan-list" component={ListPlan} />
-            <ContentRoute path="/plan-add" component={AddPlan} />
-            <ContentRoute path="/plan-edit/:id" component={EditPlan} />
+            {/*<ContentRoute path="/plan-list" component={ListPlan} />*/}
+            {/*<ContentRoute path="/plan-add" component={AddPlan} />*/}
+            {/*<ContentRoute path="/plan-edit/:id" component={EditPlan} />*/}
 
             {/*Store Routes*/}
             <ContentRoute path="/store-list" exact component={ListStore} />
-            <ContentRoute path="/store-add" component={AddStore} />
-            <ContentRoute path="/store-edit/:id" component={EditStore} />
+            <ContentRoute path="/store-filtered/:appId" component={FilteredStore} />
+            {/*<ContentRoute path="/store-add" component={AddStore} />*/}
+            {/*<ContentRoute path="/store-edit/:id" component={EditStore} />*/}
 
             <Redirect to="error/error-v1" />
         </Switch>

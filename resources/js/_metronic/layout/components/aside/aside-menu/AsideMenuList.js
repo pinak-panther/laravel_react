@@ -111,72 +111,7 @@ export function AsideMenuList({layoutProps}) {
                             </li>
                             {/*end::2 Level*/}
 
-                            {/* Navigation */}
-                            {/*begin::2 Level*/}
-                            <li
-                                className={`menu-item menu-item-submenu  ${getMenuItemActive(
-                                    "/plan-list",
-                                    true
-                                )}`}
-                                aria-haspopup="true"
-                                data-menu-toggle="hover"
-                            >
-                                <NavLink
-                                    className="menu-link menu-toggle"
-                                    to="/plan-list"
-                                >
-                                    <i className="menu-bullet menu-bullet-dot">
-                                        <span />
-                                    </i>
-                                    <span className="menu-text">Plan</span>
-                                    <i className="menu-arrow" />
-                                </NavLink>
-                                <div className="menu-submenu">
-                                    <i className="menu-arrow" />
-                                    <ul className="menu-subnav">
-                                        {/*begin::3 Level*/}
-                                        <li
-                                            className={`menu-item ${getMenuItemActive(
-                                                "/plan-list"
-                                            )}`}
-                                            aria-haspopup="true"
-                                        >
-                                            <NavLink
-                                                className="menu-link"
-                                                to="/plan-list"
-                                            >
-                                                <i className="menu-bullet menu-bullet-dot">
-                                                    <span />
-                                                </i>
-                                                <span className="menu-text">Plan List</span>
-                                            </NavLink>
-                                        </li>
-                                        {/*end::3 Level*/}
-
-                                        {/*begin::3 Level*/}
-                                        <li
-                                            className={`menu-item ${getMenuItemActive(
-                                                "/plan-add"
-                                            )}`}
-                                            aria-haspopup="true"
-                                        >
-                                            <NavLink
-                                                className="menu-link"
-                                                to="/plan-add"
-                                            >
-                                                <i className="menu-bullet menu-bullet-dot">
-                                                    <span />
-                                                </i>
-                                                <span className="menu-text">Plan Add</span>
-                                            </NavLink>
-                                        </li>
-                                        {/*end::3 Level*/}
-                                    </ul>
-                                </div>
-                            </li>
-                            {/*end::2 Level*/}
-
-                            {/* Surfaces */}
+                            {/* Stores */}
                             {/*begin::2 Level*/}
                             <li
                                 className={`menu-item menu-item-submenu ${getMenuItemActive(
@@ -214,25 +149,6 @@ export function AsideMenuList({layoutProps}) {
                                                     <span />
                                                 </i>
                                                 <span className="menu-text">Store List</span>
-                                            </NavLink>
-                                        </li>
-                                        {/*end::3 Level*/}
-
-                                        {/*begin::3 Level*/}
-                                        <li
-                                            className={`menu-item ${getMenuItemActive(
-                                                "/store-add"
-                                            )}`}
-                                            aria-haspopup="true"
-                                        >
-                                            <NavLink
-                                                className="menu-link"
-                                                to="/store-add"
-                                            >
-                                                <i className="menu-bullet menu-bullet-dot">
-                                                    <span />
-                                                </i>
-                                                <span className="menu-text">Store Add</span>
                                             </NavLink>
                                         </li>
                                         {/*end::3 Level*/}

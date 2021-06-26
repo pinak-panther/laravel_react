@@ -1,6 +1,5 @@
-
 import React, {useEffect, useState} from 'react';
-import { withStyles, makeStyles } from '@material-ui/core/styles';
+import {withStyles, makeStyles} from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -32,7 +31,6 @@ const StyledTableRow = withStyles(theme => ({
 }))(TableRow);
 
 
-
 const useStyles = makeStyles(theme => ({
     root: {
         width: '100%',
@@ -52,29 +50,28 @@ const useStyles = makeStyles(theme => ({
         margin: theme.spacing(1),
     },
     loadMore: {
-     textAlign:"center"
+        textAlign: "center"
     }
 }));
 
-function createData(id,email, name) {
-    return { id, email, name};
+function createData(id, email, name, current_plan, status) {
+    return {id, email, name, current_plan, status};
 }
 
 function FilteredStore(props) {
     const classes = useStyles();
     const history = useHistory();
-    const [store,setStore] = useState([]);
-    const [changeFlag,setChangFlag] = useState(true);
-    const [page,setPage]=useState(1);
-    const [loading,setLoading]=useState(false);
+    const [store, setStore] = useState([]);
+    const [changeFlag, setChangFlag] = useState(true);
+    const [page, setPage] = useState(1);
+    const [loading, setLoading] = useState(false);
     const [open, setOpen] = useState(false);
-    const [selectedId,setSelectedId]=useState('');
+    const [selectedId, setSelectedId] = useState('');
     const params = useParams();
-    const {planId,appId} = params;
-
+    const {appId} = params;
 
     const loadStores = (url) => {
-        API.get(url,prepareAuthHeader())
+        API.get(url, prepareAuthHeader())
             .then(response => {
                 setLoading(response.data.data.next_page_url == null ? false : true);
                 setPage(prev => prev + 1);
@@ -83,30 +80,30 @@ function FilteredStore(props) {
                 if (stores.length > 0) {
                     let tempArr = [];
                     stores.map(store => {
-                        tempArr.push(createData(store.id, store.email, store.name));
+                        tempArr.push(createData(store.id, store.email, store.name, store.current_plan, store.status));
                     });
                     setStore(prevState => prevState.concat(tempArr));
                 }
             }).catch(err => console.error(err))
     }
 
-    useEffect(()=>{
-        const url = planId && appId ? `/store?page=${page}&planId=${planId}&appId=${appId}`: `store?page=${page}`;
+    useEffect(() => {
+        const url = `/store?page=${page}&appId=${appId}`;
         loadStores(url);
-    },[changeFlag]);
+    }, [changeFlag]);
 
-    const userClickHandler = (id)=>{
-       history.push(`/store-edit/${id}`);
+    const userClickHandler = (id) => {
+        history.push(`/store-edit/${id}`);
     }
-    const userDeleteHandler = () =>{
-         API.delete(`store/${selectedId}`,prepareAuthHeader()).then(response=>{
-             let filteredStore = store.filter(singleStore => singleStore.id != selectedId);
-             setStore(filteredStore);
-             setSelectedId('');
-             setOpen(false);
-         })
+    const userDeleteHandler = () => {
+        API.delete(`store/${selectedId}`, prepareAuthHeader()).then(response => {
+            let filteredStore = store.filter(singleStore => singleStore.id != selectedId);
+            setStore(filteredStore);
+            setSelectedId('');
+            setOpen(false);
+        })
     }
-    const prepareAuthHeader = ()=>{
+    const prepareAuthHeader = () => {
         return {
             headers: {
                 'Authorization': `Bearer ${props.authToken}`
@@ -130,43 +127,52 @@ function FilteredStore(props) {
                     <TableRow>
                         <StyledTableCell>Domain</StyledTableCell>
                         <StyledTableCell align="center">Email</StyledTableCell>
-                        <StyledTableCell align="center">Actions</StyledTableCell>
+                        <StyledTableCell align="center">Plan</StyledTableCell>
+                        <StyledTableCell align="center">Status</StyledTableCell>
+                        {/*<StyledTableCell align="center">Actions</StyledTableCell>*/}
                     </TableRow>
                 </TableHead>
                 <TableBody>
                     {store.map(row => (
-                        <StyledTableRow key={row.id} >
+                        <StyledTableRow key={row.id}>
                             <StyledTableCell component="th" scope="row"> {row.name} </StyledTableCell>
                             <StyledTableCell align="center">{row.email}</StyledTableCell>
-                            <StyledTableCell align="center">
-                                <Button size="small" variant="contained" onClick={(event)=>userClickHandler(row.id)} color={"secondary"} className={classes.margin}> Update </Button>
-                                <Button size="small" variant="contained" onClick={(event)=>handleClickOpen(row.id)} color={"secondary"}> Delete </Button>
-                            </StyledTableCell>
+                            <StyledTableCell align="center">{row.current_plan}</StyledTableCell>
+                            <StyledTableCell align="center">{row.status == '1'? 'Enable' : 'Disable'}</StyledTableCell>
+                            {/*<StyledTableCell align="center">*/}
+                            {/*    <Button size="small" variant="contained" onClick={(event) => userClickHandler(row.id)}*/}
+                            {/*            color={"secondary"} className={classes.margin}> Update </Button>*/}
+                            {/*    <Button size="small" variant="contained" onClick={(event) => handleClickOpen(row.id)}*/}
+                            {/*            color={"secondary"}> Delete </Button>*/}
+                            {/*</StyledTableCell>*/}
 
                         </StyledTableRow>
                     ))}
                 </TableBody>
             </Table>
             <div className={classes.loadMore}>
-            <Button variant="contained" disabled={!loading} onClick={()=>{loadMoreClickHandler()}} color={"secondary"} size={"large"} className={classes.button}>Load More</Button>
+                <Button variant="contained" disabled={!loading} onClick={() => {
+                    loadMoreClickHandler()
+                }} color={"secondary"} size={"large"} className={classes.button}>Load More</Button>
             </div>
             <Dialog
                 open={open}
-                onClose={()=>setOpen(false)}
+                onClose={() => setOpen(false)}
                 aria-labelledby="alert-dialog-title"
                 aria-describedby="alert-dialog-description"
             >
                 <DialogTitle id="alert-dialog-title">{"Store Delete Alert"}</DialogTitle>
                 <DialogContent>
                     <DialogContentText id="alert-dialog-description">
-                      Are you sure you want to delete this Store ?
+                        Are you sure you want to delete this Store ?
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={()=>setOpen(false)} color="secondary" variant="contained" size={'small'}>
+                    <Button onClick={() => setOpen(false)} color="secondary" variant="contained" size={'small'}>
                         Disagree
                     </Button>
-                    <Button variant="contained" onClick={()=>userDeleteHandler()} color="secondary" autoFocus size={'small'}>
+                    <Button variant="contained" onClick={() => userDeleteHandler()} color="secondary" autoFocus
+                            size={'small'}>
                         Agree
                     </Button>
                 </DialogActions>
@@ -174,8 +180,9 @@ function FilteredStore(props) {
         </Paper>
     );
 }
+
 const mapStateToProps = (state, ownProps) => {
-    const {auth:{authToken}} = state ;
+    const {auth: {authToken}} = state;
     return {authToken};
 }
 export default connect(mapStateToProps)(FilteredStore)

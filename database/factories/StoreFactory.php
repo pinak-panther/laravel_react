@@ -22,8 +22,11 @@ class StoreFactory extends Factory
     public function definition()
     {
         return [
+            'application_id'=>$this->faker->randomElement(['1','2','3','4','5']),
             'name'=>$this->faker->domainName,
-            'email'=>$this->faker->email
+            'email'=>$this->faker->email,
+            'current_plan'=>$this->faker->randomElement(['plan1','plan2','plan3','plan4']),
+            'status'=>$this->faker->randomElement(['1','0']),
         ];
     }
 }

@@ -13,9 +13,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-//Auth::routes();
 //Route::get('/', function () {
 //    return view('index');
 //});
 
-Route::get('/{any}', function () {return view('index');})->where('any', '.*');
+Auth::routes();
+//Route::get('/{any}', function () {return view('index');})->where('any', '.*');
+//Route::get('/{any}', function () {return view('index');})->where('any', '.*')->where('any','^/api$');
+Route::any('{all}', function () {return view('index');})->where('all', '^(?!api).*$');
