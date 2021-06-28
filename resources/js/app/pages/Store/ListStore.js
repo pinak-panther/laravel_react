@@ -105,10 +105,10 @@ function ListStore(props) {
             <Table className={classes.table}>
                 <TableHead>
                     <TableRow>
-                        <StyledTableCell>Domain</StyledTableCell>
-                        <StyledTableCell align="center">Email</StyledTableCell>
-                        <StyledTableCell align="center">Current Plan</StyledTableCell>
-                        <StyledTableCell align="center">Status</StyledTableCell>
+                        <StyledTableCell>DOMAIN</StyledTableCell>
+                        <StyledTableCell align="center">EMAIL</StyledTableCell>
+                        <StyledTableCell align="center">CURRENT PLAN</StyledTableCell>
+                        <StyledTableCell align="center">STATUS</StyledTableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
@@ -116,7 +116,7 @@ function ListStore(props) {
                         <StyledTableRow key={row.id} >
                             <StyledTableCell component="th" scope="row"> {row.name} </StyledTableCell>
                             <StyledTableCell align="center">{row.email}</StyledTableCell>
-                            <StyledTableCell align="center">{row.current_plan}</StyledTableCell>
+                            <StyledTableCell align="center">{row.current_plan.toUpperCase()}</StyledTableCell>
                             <StyledTableCell align="center">{row.status == 1 ? 'Enable' : 'Disable'}</StyledTableCell>
                         </StyledTableRow>
                     ))}

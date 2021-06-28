@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Application;
 use App\Models\Plan;
 use App\Models\User;
 use Illuminate\Database\Seeder;
@@ -42,21 +43,27 @@ class DatabaseSeeder extends Seeder
             'remember_token' => Str::random(10),
         ]);
 
-        \App\Models\Application::factory(5)->create();
-        \App\Models\Store::factory(10)->create();
 
-//        for ($i=1;$i<6;$i++){
-//            for($j=0;$j<11;$j++){
-//                DB::table('application_store')->insert(
-//                    [
-//                        'application_id'=>$i,
-//                        'store_id'=>$j,
-//                        'plan_id'=>random_int(1,3)
-//                ]
-//                );
-//            }
-//
-//        }
+        //Application Seeder
+        $applications = [
+            ['name'=>'Dinosell', 'description'=>'Checkout Upsell, Cross sell,Birthday collect, Reviews 10+ apps','shopify_app_id'=>'1233354','shopify_app_url'=>'https://apps.shopify.com/dinosell-post-purchase-upsell-widgets'],
+            ['name'=>'One Click Upsell', 'description'=>'Build Upsells & Cross Sells - Pre & Post Purchase Funnels :-)','shopify_app_id'=>'1354500','shopify_app_url'=>'https://apps.shopify.com/zipify-oneclickupsell'],
+            ['name'=>'Shop Codes', 'description'=>'Market products and link to checkout with Shopify QR codes.','shopify_app_id'=>'1354600','shopify_app_url'=>'https://apps.shopify.com/shopcodes'],
+            ['name'=>'Smart Messenger', 'description'=>'Use FB Messenger for abandoned carts, followups, and receipts','shopify_app_id'=>'1354800','shopify_app_url'=>'https://apps.shopify.com/fb-messenger-remarketing'],
+            ['name'=>'Shyplite', 'description'=>'Single Dashboard For All Your Shipping Needs','shopify_app_id'=>'1354745','shopify_app_url'=>'https://apps.shopify.com/shyplite-1'],
+
+        ];
+        foreach ($applications as $application)
+        {
+            Application::create([
+                'name'=>$application['name'],
+                'shopify_app_id'=>$application['shopify_app_id'],
+                'shopify_app_url'=>$application['shopify_app_url'],
+                'description'=>$application['description']
+            ]);
+        }
+
+        \App\Models\Store::factory(10)->create();
 
     }
 }

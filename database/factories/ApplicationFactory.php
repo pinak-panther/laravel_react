@@ -23,9 +23,10 @@ class ApplicationFactory extends Factory
     {
 
         return [
-            //
             'name'=>'Application '.$this->faker->randomDigit,
             'description'=>$this->faker->sentence,
+            'shopify_app_url'=>'https://apps.shopify.com/'.$this->faker->slug,
+            'shopify_app_id'=>'1354745',
         ];
     }
 }

@@ -13,9 +13,13 @@ class ApplicationController extends Controller
     //Validation Rules
     private $createApplicationRules = [
         'name'=>'required',
+        'shopifyAppId'=>'required',
+        'shopifyAppUrl'=>'required',
     ];
     private $updateApplicationRules = [
         'name'=>'required',
+        'shopifyAppId'=>'required',
+        'shopifyAppUrl'=>'required',
     ];
     /**
      * @var ApplicationRepositoryInterface
@@ -49,7 +53,7 @@ class ApplicationController extends Controller
     public function store(Request $request)
     {
         $request->validate($this->createApplicationRules);
-        $inputs = $request->only(['name','description']);
+        $inputs = $request->only(['name','shopifyAppId','shopifyAppUrl','description']);
         $this->appRepo->store($inputs);
         return $this->sendSuccess("Application Created Successfully");
     }
@@ -76,7 +80,7 @@ class ApplicationController extends Controller
     {
         $applicationId = $application->id;
         $request->validate($this->updateApplicationRules);
-        $inputs = $request->only(['name','description']);
+        $inputs = $request->only(['name','shopifyAppId','shopifyAppUrl','description']);
         $this->appRepo->edit($inputs,$applicationId);
         return $this->sendSuccess("Application Update Successfully");
     }

@@ -15,7 +15,9 @@ class CreateApplicationsTable extends Migration
     {
         Schema::create('applications', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('shopify_app_id');
             $table->string('name');
+            $table->string('shopify_app_url');
             $table->text('description')->nullable();
             $table->softDeletes();
             $table->timestamps();

@@ -9,9 +9,9 @@ use App\Models\Store;
 class Application extends Model
 {
     use HasFactory, SoftDeletes;
-    protected $fillable = ['name','description'];
+    protected $fillable = ['name','shopify_app_id','shopify_app_url','description'];
     public function stores()
     {
-        return $this->hasMany(Store::class,'application_id','id');
+        return $this->hasMany(Store::class,'application_id','shopify_app_id');
     }
 }

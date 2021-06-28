@@ -46,6 +46,8 @@ class ApplicationRepository implements ApplicationRepositoryInterface
     {
         return Application::create([
             'name'=>$inputs['name'],
+            'shopify_app_id'=>$inputs['shopifyAppId'],
+            'shopify_app_url'=>$inputs['shopifyAppUrl'],
             'description'=>$inputs['description'],
         ]);
     }
@@ -60,6 +62,8 @@ class ApplicationRepository implements ApplicationRepositoryInterface
         $application = $this->find($id);
         return $application->update([
             'name'=>$inputs['name'],
+            'shopify_app_id'=>$inputs['shopifyAppId'],
+            'shopify_app_url'=>$inputs['shopifyAppUrl'],
             'description'=>$inputs['description'],
         ]);
     }

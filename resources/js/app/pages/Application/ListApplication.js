@@ -62,8 +62,8 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-function createData(id,name, description, price, category) {
-    return { id, name, description, price, category };
+function createData(id,name, description, shopify_app_id, shopify_app_url) {
+    return { id, name, description, shopify_app_id, shopify_app_url };
 }
 
 
@@ -85,7 +85,7 @@ function ListApplication(props) {
                 if (applications.length > 0) {
                     let tempArr = [];
                     applications.map(application => {
-                        tempArr.push(createData(application.id, application.name, application.description));
+                        tempArr.push(createData(application.id, application.name, application.description,application.shopify_app_id, application.shopify_app_url));
                     });
                     setApplication(prevState => prevState.concat(tempArr));
                 }
@@ -115,10 +115,10 @@ function ListApplication(props) {
         history.push(`/store-filtered/${id}`)
     };
 
-    function planClickHandler(id) {
+    function planClickHandler(url='https://apps.shopify.com') {
         return window.open(
-            'https://apps.shopify.com',
-            '_blank' //
+            `${url}`,
+            '_blank'
         );
     }
 
@@ -127,10 +127,10 @@ function ListApplication(props) {
             <Table className={classes.table}>
                 <TableHead>
                     <TableRow>
-                        <StyledTableCell>Name</StyledTableCell>
-                        <StyledTableCell align="center">Description</StyledTableCell>
-                        <StyledTableCell align="center">View Store</StyledTableCell>
-                        <StyledTableCell align="center">Actions</StyledTableCell>
+                        <StyledTableCell>NAME</StyledTableCell>
+                        <StyledTableCell align="center">DESCRIPTION</StyledTableCell>
+                        <StyledTableCell align="center">VIEW STORE</StyledTableCell>
+                        <StyledTableCell align="center">ACTIONS</StyledTableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
@@ -143,7 +143,7 @@ function ListApplication(props) {
                             </StyledTableCell>
                             <StyledTableCell align="center">
                                 <Button size="small" variant="contained" onClick={(event)=>userClickHandler(row.id)} color={"secondary"} className={classes.margin}> Update </Button>
-                                <Button size="small" variant="contained" onClick={(event)=>planClickHandler(row.id)} color={"secondary"} className={classes.margin}> Show Plan </Button>
+                                <Button size="small" variant="contained" onClick={(event)=>planClickHandler(row.shopify_app_url)} color={"secondary"} className={classes.margin}> Show Plan </Button>
                             </StyledTableCell>
 
                         </StyledTableRow>

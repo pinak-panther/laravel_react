@@ -60,13 +60,10 @@ function createData(id, email, name, current_plan, status) {
 
 function FilteredStore(props) {
     const classes = useStyles();
-    const history = useHistory();
     const [store, setStore] = useState([]);
     const [changeFlag, setChangFlag] = useState(true);
     const [page, setPage] = useState(1);
-    const [loading, setLoading] = useState(false);
-    const [open, setOpen] = useState(false);
-    const [selectedId, setSelectedId] = useState('');
+    const [loading, setLoading] = useState(false); //for enabling and disabling the Load More button
     const params = useParams();
     const {appId} = params;
 
@@ -92,17 +89,6 @@ function FilteredStore(props) {
         loadStores(url);
     }, [changeFlag]);
 
-    const userClickHandler = (id) => {
-        history.push(`/store-edit/${id}`);
-    }
-    const userDeleteHandler = () => {
-        API.delete(`store/${selectedId}`, prepareAuthHeader()).then(response => {
-            let filteredStore = store.filter(singleStore => singleStore.id != selectedId);
-            setStore(filteredStore);
-            setSelectedId('');
-            setOpen(false);
-        })
-    }
     const prepareAuthHeader = () => {
         return {
             headers: {
@@ -115,21 +101,15 @@ function FilteredStore(props) {
         setChangFlag(!changeFlag);
     }
 
-    function handleClickOpen(id) {
-        setSelectedId(id);
-        setOpen(true);
-    }
-
     return (
         <Paper className={classes.root}>
             <Table className={classes.table}>
                 <TableHead>
                     <TableRow>
-                        <StyledTableCell>Domain</StyledTableCell>
-                        <StyledTableCell align="center">Email</StyledTableCell>
-                        <StyledTableCell align="center">Plan</StyledTableCell>
-                        <StyledTableCell align="center">Status</StyledTableCell>
-                        {/*<StyledTableCell align="center">Actions</StyledTableCell>*/}
+                        <StyledTableCell>DOMAIN</StyledTableCell>
+                        <StyledTableCell align="center">EMAIL</StyledTableCell>
+                        <StyledTableCell align="center">PLAN</StyledTableCell>
+                        <StyledTableCell align="center">STATUS</StyledTableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
@@ -137,14 +117,8 @@ function FilteredStore(props) {
                         <StyledTableRow key={row.id}>
                             <StyledTableCell component="th" scope="row"> {row.name} </StyledTableCell>
                             <StyledTableCell align="center">{row.email}</StyledTableCell>
-                            <StyledTableCell align="center">{row.current_plan}</StyledTableCell>
+                            <StyledTableCell align="center">{row.current_plan.toUpperCase()}</StyledTableCell>
                             <StyledTableCell align="center">{row.status == '1'? 'Enable' : 'Disable'}</StyledTableCell>
-                            {/*<StyledTableCell align="center">*/}
-                            {/*    <Button size="small" variant="contained" onClick={(event) => userClickHandler(row.id)}*/}
-                            {/*            color={"secondary"} className={classes.margin}> Update </Button>*/}
-                            {/*    <Button size="small" variant="contained" onClick={(event) => handleClickOpen(row.id)}*/}
-                            {/*            color={"secondary"}> Delete </Button>*/}
-                            {/*</StyledTableCell>*/}
 
                         </StyledTableRow>
                     ))}
@@ -155,28 +129,6 @@ function FilteredStore(props) {
                     loadMoreClickHandler()
                 }} color={"secondary"} size={"large"} className={classes.button}>Load More</Button>
             </div>
-            <Dialog
-                open={open}
-                onClose={() => setOpen(false)}
-                aria-labelledby="alert-dialog-title"
-                aria-describedby="alert-dialog-description"
-            >
-                <DialogTitle id="alert-dialog-title">{"Store Delete Alert"}</DialogTitle>
-                <DialogContent>
-                    <DialogContentText id="alert-dialog-description">
-                        Are you sure you want to delete this Store ?
-                    </DialogContentText>
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={() => setOpen(false)} color="secondary" variant="contained" size={'small'}>
-                        Disagree
-                    </Button>
-                    <Button variant="contained" onClick={() => userDeleteHandler()} color="secondary" autoFocus
-                            size={'small'}>
-                        Agree
-                    </Button>
-                </DialogActions>
-            </Dialog>
         </Paper>
     );
 }
